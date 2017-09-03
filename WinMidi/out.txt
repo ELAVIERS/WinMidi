@@ -1,0 +1,856 @@
+Header:	Format 1		12 Chunks	480 Ticks per beat
+Track:	Length:116
+Meta	Time Signature		4 2 18 8
+Meta	Key Signature		FF 0
+Meta	Set Tempo		6 8A 1B
+MIDI	Control Change		Channel 0	Controller 121	Value 0
+MIDI	Program Change		Channel 0	Program 73
+MIDI	Control Change		Channel 0	Controller 7	Value 100
+MIDI	Control Change		Channel 0	Controller 10	Value 64
+MIDI	Control Change		Channel 0	Controller 91	Value 0
+MIDI	Control Change		Channel 0	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note On			Channel 0	Note 86		Velocity 49
+MIDI	Note Off		Channel 0	Note 86		Velocity 0
+MIDI	Note On			Channel 0	Note 84		Velocity 49
+MIDI	Note Off		Channel 0	Note 84		Velocity 0
+MIDI	Note On			Channel 0	Note 82		Velocity 49
+MIDI	Note Off		Channel 0	Note 82		Velocity 0
+MIDI	Note On			Channel 0	Note 81		Velocity 49
+MIDI	Note Off		Channel 0	Note 81		Velocity 0
+MIDI	Note On			Channel 0	Note 79		Velocity 49
+MIDI	Note Off		Channel 0	Note 79		Velocity 0
+MIDI	Note On			Channel 0	Note 77		Velocity 49
+MIDI	Note Off		Channel 0	Note 77		Velocity 0
+MIDI	Note On			Channel 0	Note 76		Velocity 49
+MIDI	Note Off		Channel 0	Note 76		Velocity 0
+MIDI	Note On			Channel 0	Note 74		Velocity 96
+MIDI	Note Off		Channel 0	Note 74		Velocity 0
+MIDI	Note On			Channel 0	Note 86		Velocity 96
+MIDI	Note Off		Channel 0	Note 86		Velocity 0
+Meta	Track End
+
+
+Track:	Length:126
+Meta	Key Signature		FF 0
+MIDI	Control Change		Channel 1	Controller 121	Value 0
+MIDI	Program Change		Channel 1	Program 68
+MIDI	Control Change		Channel 1	Controller 7	Value 100
+MIDI	Control Change		Channel 1	Controller 10	Value 64
+MIDI	Control Change		Channel 1	Controller 91	Value 0
+MIDI	Control Change		Channel 1	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note On			Channel 1	Note 69		Velocity 49
+MIDI	Note On			Channel 1	Note 81		Velocity 49
+MIDI	Note Off		Channel 1	Note 69		Velocity 0
+MIDI	Note Off		Channel 1	Note 81		Velocity 0
+MIDI	Note On			Channel 1	Note 82		Velocity 49
+MIDI	Note Off		Channel 1	Note 82		Velocity 0
+MIDI	Note On			Channel 1	Note 81		Velocity 49
+MIDI	Note Off		Channel 1	Note 81		Velocity 0
+MIDI	Note On			Channel 1	Note 79		Velocity 49
+MIDI	Note Off		Channel 1	Note 79		Velocity 0
+MIDI	Note On			Channel 1	Note 77		Velocity 49
+MIDI	Note Off		Channel 1	Note 77		Velocity 0
+MIDI	Note On			Channel 1	Note 76		Velocity 49
+MIDI	Note Off		Channel 1	Note 76		Velocity 0
+MIDI	Note On			Channel 1	Note 74		Velocity 49
+MIDI	Note Off		Channel 1	Note 74		Velocity 0
+MIDI	Note On			Channel 1	Note 73		Velocity 49
+MIDI	Note Off		Channel 1	Note 73		Velocity 0
+MIDI	Note On			Channel 1	Note 62		Velocity 49
+MIDI	Note On			Channel 1	Note 74		Velocity 49
+MIDI	Note Off		Channel 1	Note 62		Velocity 0
+MIDI	Note Off		Channel 1	Note 74		Velocity 0
+MIDI	Note On			Channel 1	Note 77		Velocity 49
+MIDI	Note On			Channel 1	Note 81		Velocity 49
+MIDI	Note Off		Channel 1	Note 77		Velocity 0
+MIDI	Note Off		Channel 1	Note 81		Velocity 0
+Meta	Track End
+
+
+Track:	Length:65
+Meta	Key Signature		FF 0
+MIDI	Control Change		Channel 2	Controller 121	Value 0
+MIDI	Program Change		Channel 2	Program 70
+MIDI	Control Change		Channel 2	Controller 7	Value 100
+MIDI	Control Change		Channel 2	Controller 10	Value 64
+MIDI	Control Change		Channel 2	Controller 91	Value 0
+MIDI	Control Change		Channel 2	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note On			Channel 2	Note 52		Velocity 49
+MIDI	Note On			Channel 2	Note 64		Velocity 49
+MIDI	Note Off		Channel 2	Note 52		Velocity 0
+MIDI	Note Off		Channel 2	Note 64		Velocity 0
+MIDI	Note On			Channel 2	Note 38		Velocity 96
+MIDI	Note On			Channel 2	Note 50		Velocity 96
+MIDI	Note Off		Channel 2	Note 38		Velocity 0
+MIDI	Note Off		Channel 2	Note 50		Velocity 0
+Meta	Track End
+
+
+Track:	Length:90
+Meta	Key Signature		FD 0
+MIDI	Control Change		Channel 3	Controller 121	Value 0
+MIDI	Program Change		Channel 3	Program 60
+MIDI	Control Change		Channel 3	Controller 7	Value 100
+MIDI	Control Change		Channel 3	Controller 10	Value 64
+MIDI	Control Change		Channel 3	Controller 91	Value 0
+MIDI	Control Change		Channel 3	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note On			Channel 3	Note 50		Velocity 49
+MIDI	Note On			Channel 3	Note 62		Velocity 49
+MIDI	Note Off		Channel 3	Note 50		Velocity 0
+MIDI	Note Off		Channel 3	Note 62		Velocity 0
+MIDI	Note On			Channel 3	Note 45		Velocity 96
+MIDI	Note On			Channel 3	Note 57		Velocity 96
+MIDI	Note Off		Channel 3	Note 45		Velocity 0
+MIDI	Note Off		Channel 3	Note 57		Velocity 0
+MIDI	Note On			Channel 3	Note 50		Velocity 96
+MIDI	Note On			Channel 3	Note 62		Velocity 96
+MIDI	Note Off		Channel 3	Note 50		Velocity 0
+MIDI	Note Off		Channel 3	Note 62		Velocity 0
+MIDI	Note On			Channel 3	Note 50		Velocity 96
+MIDI	Note On			Channel 3	Note 62		Velocity 96
+MIDI	Note Off		Channel 3	Note 50		Velocity 0
+MIDI	Note Off		Channel 3	Note 62		Velocity 0
+Meta	Track End
+
+
+Track:	Length:90
+Meta	Key Signature		FD 0
+MIDI	Control Change		Channel 4	Controller 121	Value 0
+MIDI	Program Change		Channel 4	Program 56
+MIDI	Control Change		Channel 4	Controller 7	Value 100
+MIDI	Control Change		Channel 4	Controller 10	Value 64
+MIDI	Control Change		Channel 4	Controller 91	Value 0
+MIDI	Control Change		Channel 4	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Control Change		Channel 5	Controller 121	Value 0
+MIDI	Program Change		Channel 5	Program 59
+MIDI	Control Change		Channel 5	Controller 7	Value 100
+MIDI	Control Change		Channel 5	Controller 10	Value 64
+MIDI	Control Change		Channel 5	Controller 91	Value 0
+MIDI	Control Change		Channel 5	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note On			Channel 4	Note 62		Velocity 96
+MIDI	Note On			Channel 4	Note 74		Velocity 96
+MIDI	Note Off		Channel 4	Note 62		Velocity 0
+MIDI	Note Off		Channel 4	Note 74		Velocity 0
+MIDI	Note On			Channel 4	Note 62		Velocity 96
+MIDI	Note On			Channel 4	Note 74		Velocity 96
+MIDI	Note Off		Channel 4	Note 62		Velocity 0
+MIDI	Note Off		Channel 4	Note 74		Velocity 0
+Meta	Track End
+
+
+Track:	Length:53
+Meta	Key Signature		FF 0
+MIDI	Control Change		Channel 6	Controller 121	Value 0
+MIDI	Program Change		Channel 6	Program 47
+MIDI	Control Change		Channel 6	Controller 7	Value 100
+MIDI	Control Change		Channel 6	Controller 10	Value 64
+MIDI	Control Change		Channel 6	Controller 91	Value 0
+MIDI	Control Change		Channel 6	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note On			Channel 6	Note 50		Velocity 96
+MIDI	Note Off		Channel 6	Note 50		Velocity 0
+MIDI	Note On			Channel 6	Note 50		Velocity 96
+MIDI	Note Off		Channel 6	Note 50		Velocity 0
+Meta	Track End
+
+
+Track:	Length:35
+Meta	Key Signature		FF 0
+MIDI	Control Change		Channel 7	Controller 121	Value 0
+MIDI	Program Change		Channel 7	Program 0
+MIDI	Control Change		Channel 7	Controller 7	Value 100
+MIDI	Control Change		Channel 7	Controller 10	Value 64
+MIDI	Control Change		Channel 7	Controller 91	Value 0
+MIDI	Control Change		Channel 7	Controller 93	Value 0
+Meta	MIDI Port		0
+Meta	Track End
+
+
+Track:	Length:15
+Meta	Key Signature		FF 0
+Meta	MIDI Port		0
+Meta	Track End
+
+
+Track:	Length:610
+Meta	Key Signature		FF 0
+MIDI	Control Change		Channel 8	Controller 121	Value 0
+MIDI	Program Change		Channel 8	Program 40
+MIDI	Control Change		Channel 8	Controller 7	Value 100
+MIDI	Control Change		Channel 8	Controller 10	Value 64
+MIDI	Control Change		Channel 8	Controller 91	Value 0
+MIDI	Control Change		Channel 8	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Control Change		Channel 10	Controller 121	Value 0
+MIDI	Program Change		Channel 10	Program 45
+MIDI	Control Change		Channel 10	Controller 7	Value 100
+MIDI	Control Change		Channel 10	Controller 10	Value 64
+MIDI	Control Change		Channel 10	Controller 91	Value 0
+MIDI	Control Change		Channel 10	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Control Change		Channel 11	Controller 121	Value 0
+MIDI	Program Change		Channel 11	Program 44
+MIDI	Control Change		Channel 11	Controller 7	Value 100
+MIDI	Control Change		Channel 11	Controller 10	Value 64
+MIDI	Control Change		Channel 11	Controller 91	Value 0
+MIDI	Control Change		Channel 11	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 57		Velocity 49
+MIDI	Note Off		Channel 8	Note 57		Velocity 0
+MIDI	Note On			Channel 8	Note 65		Velocity 49
+MIDI	Note Off		Channel 8	Note 65		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 61		Velocity 49
+MIDI	Note Off		Channel 8	Note 61		Velocity 0
+MIDI	Note On			Channel 8	Note 61		Velocity 49
+MIDI	Note Off		Channel 8	Note 61		Velocity 0
+MIDI	Note On			Channel 8	Note 61		Velocity 49
+MIDI	Note Off		Channel 8	Note 61		Velocity 0
+MIDI	Note On			Channel 8	Note 63		Velocity 49
+MIDI	Note Off		Channel 8	Note 63		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 57		Velocity 49
+MIDI	Note Off		Channel 8	Note 57		Velocity 0
+MIDI	Note On			Channel 8	Note 67		Velocity 49
+MIDI	Note Off		Channel 8	Note 67		Velocity 0
+MIDI	Note On			Channel 8	Note 65		Velocity 49
+MIDI	Note Off		Channel 8	Note 65		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 49
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 65		Velocity 49
+MIDI	Note Off		Channel 8	Note 65		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 67		Velocity 49
+MIDI	Note Off		Channel 8	Note 67		Velocity 0
+MIDI	Note On			Channel 8	Note 66		Velocity 49
+MIDI	Note Off		Channel 8	Note 66		Velocity 0
+MIDI	Note On			Channel 8	Note 66		Velocity 49
+MIDI	Note Off		Channel 8	Note 66		Velocity 0
+MIDI	Note On			Channel 8	Note 69		Velocity 49
+MIDI	Note Off		Channel 8	Note 69		Velocity 0
+MIDI	Note On			Channel 8	Note 67		Velocity 49
+MIDI	Note Off		Channel 8	Note 67		Velocity 0
+MIDI	Note On			Channel 8	Note 67		Velocity 49
+MIDI	Note Off		Channel 8	Note 67		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 67		Velocity 49
+MIDI	Note Off		Channel 8	Note 67		Velocity 0
+MIDI	Note On			Channel 8	Note 66		Velocity 49
+MIDI	Note Off		Channel 8	Note 66		Velocity 0
+MIDI	Note On			Channel 8	Note 66		Velocity 49
+MIDI	Note Off		Channel 8	Note 66		Velocity 0
+MIDI	Note On			Channel 8	Note 69		Velocity 49
+MIDI	Note Off		Channel 8	Note 69		Velocity 0
+MIDI	Note On			Channel 8	Note 68		Velocity 49
+MIDI	Note Off		Channel 8	Note 68		Velocity 0
+MIDI	Note On			Channel 8	Note 68		Velocity 49
+MIDI	Note Off		Channel 8	Note 68		Velocity 0
+MIDI	Note On			Channel 8	Note 71		Velocity 49
+MIDI	Note Off		Channel 8	Note 71		Velocity 0
+MIDI	Note On			Channel 8	Note 69		Velocity 49
+MIDI	Note Off		Channel 8	Note 69		Velocity 0
+MIDI	Note On			Channel 8	Note 69		Velocity 49
+MIDI	Note Off		Channel 8	Note 69		Velocity 0
+MIDI	Note On			Channel 8	Note 69		Velocity 49
+MIDI	Note Off		Channel 8	Note 69		Velocity 0
+MIDI	Note On			Channel 8	Note 69		Velocity 49
+MIDI	Note Off		Channel 8	Note 69		Velocity 0
+MIDI	Note On			Channel 8	Note 72		Velocity 49
+MIDI	Note Off		Channel 8	Note 72		Velocity 0
+MIDI	Note On			Channel 8	Note 71		Velocity 49
+MIDI	Note Off		Channel 8	Note 71		Velocity 0
+MIDI	Note On			Channel 8	Note 71		Velocity 49
+MIDI	Note Off		Channel 8	Note 71		Velocity 0
+MIDI	Note On			Channel 8	Note 74		Velocity 49
+MIDI	Note Off		Channel 8	Note 74		Velocity 0
+MIDI	Note On			Channel 8	Note 73		Velocity 49
+MIDI	Note Off		Channel 8	Note 73		Velocity 0
+MIDI	Note On			Channel 8	Note 73		Velocity 49
+MIDI	Note Off		Channel 8	Note 73		Velocity 0
+MIDI	Note On			Channel 8	Note 76		Velocity 49
+MIDI	Note Off		Channel 8	Note 76		Velocity 0
+MIDI	Note On			Channel 8	Note 74		Velocity 49
+MIDI	Note Off		Channel 8	Note 74		Velocity 0
+MIDI	Note On			Channel 8	Note 74		Velocity 49
+MIDI	Note Off		Channel 8	Note 74		Velocity 0
+MIDI	Note On			Channel 8	Note 72		Velocity 49
+MIDI	Note Off		Channel 8	Note 72		Velocity 0
+MIDI	Note On			Channel 8	Note 70		Velocity 49
+MIDI	Note Off		Channel 8	Note 70		Velocity 0
+MIDI	Note On			Channel 8	Note 69		Velocity 49
+MIDI	Note Off		Channel 8	Note 69		Velocity 0
+MIDI	Note On			Channel 8	Note 67		Velocity 49
+MIDI	Note Off		Channel 8	Note 67		Velocity 0
+MIDI	Note On			Channel 8	Note 65		Velocity 49
+MIDI	Note Off		Channel 8	Note 65		Velocity 0
+MIDI	Note On			Channel 8	Note 64		Velocity 49
+MIDI	Note Off		Channel 8	Note 64		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 96
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+MIDI	Note On			Channel 8	Note 57		Velocity 96
+MIDI	Note Off		Channel 8	Note 57		Velocity 0
+MIDI	Note On			Channel 8	Note 59		Velocity 96
+MIDI	Note Off		Channel 8	Note 59		Velocity 0
+MIDI	Note On			Channel 8	Note 61		Velocity 96
+MIDI	Note Off		Channel 8	Note 61		Velocity 0
+MIDI	Note On			Channel 8	Note 62		Velocity 96
+MIDI	Note Off		Channel 8	Note 62		Velocity 0
+Meta	Track End
+
+
+Track:	Length:550
+Meta	Key Signature		FF 0
+MIDI	Control Change		Channel 12	Controller 121	Value 0
+MIDI	Program Change		Channel 12	Program 40
+MIDI	Control Change		Channel 12	Controller 7	Value 100
+MIDI	Control Change		Channel 12	Controller 10	Value 64
+MIDI	Control Change		Channel 12	Controller 91	Value 0
+MIDI	Control Change		Channel 12	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Control Change		Channel 13	Controller 121	Value 0
+MIDI	Program Change		Channel 13	Program 45
+MIDI	Control Change		Channel 13	Controller 7	Value 100
+MIDI	Control Change		Channel 13	Controller 10	Value 64
+MIDI	Control Change		Channel 13	Controller 91	Value 0
+MIDI	Control Change		Channel 13	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Control Change		Channel 14	Controller 121	Value 0
+MIDI	Program Change		Channel 14	Program 44
+MIDI	Control Change		Channel 14	Controller 7	Value 100
+MIDI	Control Change		Channel 14	Controller 10	Value 64
+MIDI	Control Change		Channel 14	Controller 91	Value 0
+MIDI	Control Change		Channel 14	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 49
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 62		Velocity 49
+MIDI	Note Off		Channel 12	Note 62		Velocity 0
+MIDI	Note On			Channel 12	Note 62		Velocity 49
+MIDI	Note Off		Channel 12	Note 62		Velocity 0
+MIDI	Note On			Channel 12	Note 62		Velocity 49
+MIDI	Note Off		Channel 12	Note 62		Velocity 0
+MIDI	Note On			Channel 12	Note 62		Velocity 49
+MIDI	Note Off		Channel 12	Note 62		Velocity 0
+MIDI	Note On			Channel 12	Note 62		Velocity 49
+MIDI	Note Off		Channel 12	Note 62		Velocity 0
+MIDI	Note On			Channel 12	Note 64		Velocity 49
+MIDI	Note Off		Channel 12	Note 64		Velocity 0
+MIDI	Note On			Channel 12	Note 64		Velocity 49
+MIDI	Note Off		Channel 12	Note 64		Velocity 0
+MIDI	Note On			Channel 12	Note 64		Velocity 49
+MIDI	Note Off		Channel 12	Note 64		Velocity 0
+MIDI	Note On			Channel 12	Note 64		Velocity 49
+MIDI	Note Off		Channel 12	Note 64		Velocity 0
+MIDI	Note On			Channel 12	Note 64		Velocity 49
+MIDI	Note Off		Channel 12	Note 64		Velocity 0
+MIDI	Note On			Channel 12	Note 64		Velocity 49
+MIDI	Note Off		Channel 12	Note 64		Velocity 0
+MIDI	Note On			Channel 12	Note 69		Velocity 49
+MIDI	Note Off		Channel 12	Note 69		Velocity 0
+MIDI	Note On			Channel 12	Note 69		Velocity 49
+MIDI	Note Off		Channel 12	Note 69		Velocity 0
+MIDI	Note On			Channel 12	Note 69		Velocity 49
+MIDI	Note Off		Channel 12	Note 69		Velocity 0
+MIDI	Note On			Channel 12	Note 69		Velocity 49
+MIDI	Note Off		Channel 12	Note 69		Velocity 0
+MIDI	Note On			Channel 12	Note 69		Velocity 49
+MIDI	Note Off		Channel 12	Note 69		Velocity 0
+MIDI	Note On			Channel 12	Note 69		Velocity 49
+MIDI	Note Off		Channel 12	Note 69		Velocity 0
+MIDI	Note On			Channel 12	Note 69		Velocity 49
+MIDI	Note Off		Channel 12	Note 69		Velocity 0
+MIDI	Note On			Channel 12	Note 69		Velocity 49
+MIDI	Note Off		Channel 12	Note 69		Velocity 0
+MIDI	Note On			Channel 12	Note 70		Velocity 49
+MIDI	Note Off		Channel 12	Note 70		Velocity 0
+MIDI	Note On			Channel 12	Note 69		Velocity 49
+MIDI	Note Off		Channel 12	Note 69		Velocity 0
+MIDI	Note On			Channel 12	Note 67		Velocity 49
+MIDI	Note Off		Channel 12	Note 67		Velocity 0
+MIDI	Note On			Channel 12	Note 65		Velocity 49
+MIDI	Note Off		Channel 12	Note 65		Velocity 0
+MIDI	Note On			Channel 12	Note 64		Velocity 49
+MIDI	Note Off		Channel 12	Note 64		Velocity 0
+MIDI	Note On			Channel 12	Note 62		Velocity 49
+MIDI	Note Off		Channel 12	Note 62		Velocity 0
+MIDI	Note On			Channel 12	Note 61		Velocity 49
+MIDI	Note Off		Channel 12	Note 61		Velocity 0
+MIDI	Note On			Channel 12	Note 62		Velocity 96
+MIDI	Note Off		Channel 12	Note 62		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 96
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 96
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 96
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 96
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 96
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 96
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 96
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+MIDI	Note On			Channel 12	Note 57		Velocity 96
+MIDI	Note Off		Channel 12	Note 57		Velocity 0
+Meta	Track End
+
+
+Track:	Length:564
+Meta	Key Signature		FF 0
+MIDI	Control Change		Channel 15	Controller 121	Value 0
+MIDI	Program Change		Channel 15	Program 41
+MIDI	Control Change		Channel 15	Controller 7	Value 100
+MIDI	Control Change		Channel 15	Controller 10	Value 64
+MIDI	Control Change		Channel 15	Controller 91	Value 0
+MIDI	Control Change		Channel 15	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Control Change		Channel 0	Controller 121	Value 0
+MIDI	Program Change		Channel 0	Program 45
+MIDI	Control Change		Channel 0	Controller 7	Value 100
+MIDI	Control Change		Channel 0	Controller 10	Value 64
+MIDI	Control Change		Channel 0	Controller 91	Value 0
+MIDI	Control Change		Channel 0	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Control Change		Channel 1	Controller 121	Value 0
+MIDI	Program Change		Channel 1	Program 44
+MIDI	Control Change		Channel 1	Controller 7	Value 100
+MIDI	Control Change		Channel 1	Controller 10	Value 64
+MIDI	Control Change		Channel 1	Controller 91	Value 0
+MIDI	Control Change		Channel 1	Controller 93	Value 0
+Meta	MIDI Port		0
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 50		Velocity 49
+MIDI	Note Off		Channel 15	Note 50		Velocity 0
+MIDI	Note On			Channel 15	Note 52		Velocity 49
+MIDI	Note Off		Channel 15	Note 52		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 52		Velocity 49
+MIDI	Note Off		Channel 15	Note 52		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 55		Velocity 49
+MIDI	Note Off		Channel 15	Note 55		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 49
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 57		Velocity 49
+MIDI	Note Off		Channel 15	Note 57		Velocity 0
+MIDI	Note On			Channel 15	Note 58		Velocity 49
+MIDI	Note Off		Channel 15	Note 58		Velocity 0
+MIDI	Note On			Channel 15	Note 58		Velocity 49
+MIDI	Note Off		Channel 15	Note 58		Velocity 0
+MIDI	Note On			Channel 15	Note 58		Velocity 49
+MIDI	Note Off		Channel 15	Note 58		Velocity 0
+MIDI	Note On			Channel 15	Note 60		Velocity 49
+MIDI	Note Off		Channel 15	Note 60		Velocity 0
+MIDI	Note On			Channel 15	Note 60		Velocity 49
+MIDI	Note Off		Channel 15	Note 60		Velocity 0
+MIDI	Note On			Channel 15	Note 60		Velocity 49
+MIDI	Note Off		Channel 15	Note 60		Velocity 0
+MIDI	Note On			Channel 15	Note 58		Velocity 49
+MIDI	Note Off		Channel 15	Note 58		Velocity 0
+MIDI	Note On			Channel 15	Note 60		Velocity 49
+MIDI	Note Off		Channel 15	Note 60		Velocity 0
+MIDI	Note On			Channel 15	Note 60		Velocity 49
+MIDI	Note Off		Channel 15	Note 60		Velocity 0
+MIDI	Note On			Channel 15	Note 60		Velocity 49
+MIDI	Note Off		Channel 15	Note 60		Velocity 0
+MIDI	Note On			Channel 15	Note 62		Velocity 49
+MIDI	Note Off		Channel 15	Note 62		Velocity 0
+MIDI	Note On			Channel 15	Note 62		Velocity 49
+MIDI	Note Off		Channel 15	Note 62		Velocity 0
+MIDI	Note On			Channel 15	Note 62		Velocity 49
+MIDI	Note Off		Channel 15	Note 62		Velocity 0
+MIDI	Note On			Channel 15	Note 60		Velocity 49
+MIDI	Note Off		Channel 15	Note 60		Velocity 0
+MIDI	Note On			Channel 15	Note 65		Velocity 49
+MIDI	Note Off		Channel 15	Note 65		Velocity 0
+MIDI	Note On			Channel 15	Note 65		Velocity 49
+MIDI	Note Off		Channel 15	Note 65		Velocity 0
+MIDI	Note On			Channel 15	Note 65		Velocity 49
+MIDI	Note Off		Channel 15	Note 65		Velocity 0
+MIDI	Note On			Channel 15	Note 67		Velocity 49
+MIDI	Note Off		Channel 15	Note 67		Velocity 0
+MIDI	Note On			Channel 15	Note 67		Velocity 49
+MIDI	Note Off		Channel 15	Note 67		Velocity 0
+MIDI	Note On			Channel 15	Note 67		Velocity 49
+MIDI	Note Off		Channel 15	Note 67		Velocity 0
+MIDI	Note On			Channel 15	Note 65		Velocity 49
+MIDI	Note Off		Channel 15	Note 65		Velocity 0
+MIDI	Note On			Channel 15	Note 62		Velocity 49
+MIDI	Note Off		Channel 15	Note 62		Velocity 0
+MIDI	Note On			Channel 15	Note 62		Velocity 49
+MIDI	Note Off		Channel 15	Note 62		Velocity 0
+MIDI	Note On			Channel 15	Note 57		Velocity 49
+MIDI	Note Off		Channel 15	Note 57		Velocity 0
+MIDI	Note On			Channel 15	Note 57		Velocity 49
+MIDI	Note Off		Channel 15	Note 57		Velocity 0
+MIDI	Note On			Channel 15	Note 57		Velocity 49
+MIDI	Note Off		Channel 15	Note 57		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 96
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 96
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 96
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 96
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 96
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 96
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 96
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 96
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+MIDI	Note On			Channel 15	Note 53		Velocity 96
+MIDI	Note Off		Channel 15	Note 53		Velocity 0
+Meta	Track End
+
+
+Track:	Length:580
+Meta	Key Signature		FF 0
+MIDI	Control Change		Channel 2	Controller 121	Value 0
+MIDI	Program Change		Channel 2	Program 42
+MIDI	Control Change		Channel 2	Controller 7	Value 100
+MIDI	Control Change		Channel 2	Controller 10	Value 64
+MIDI	Control Change		Channel 2	Controller 91	Value 0
+MIDI	Control Change		Channel 2	Controller 93	Value 0
+Meta	MIDI Port		1
+MIDI	Note On			Channel 2	Note 50		Velocity 49
+MIDI	Control Change		Channel 3	Controller 121	Value 0
+MIDI	Program Change		Channel 3	Program 45
+MIDI	Control Change		Channel 3	Controller 7	Value 100
+MIDI	Control Change		Channel 3	Controller 10	Value 64
+MIDI	Control Change		Channel 3	Controller 91	Value 0
+MIDI	Control Change		Channel 3	Controller 93	Value 0
+Meta	MIDI Port		1
+MIDI	Control Change		Channel 4	Controller 121	Value 0
+MIDI	Program Change		Channel 4	Program 44
+MIDI	Control Change		Channel 4	Controller 7	Value 100
+MIDI	Control Change		Channel 4	Controller 10	Value 64
+MIDI	Control Change		Channel 4	Controller 91	Value 0
+MIDI	Control Change		Channel 4	Controller 93	Value 0
+Meta	MIDI Port		1
+MIDI	Note Off		Channel 2	Note 50		Velocity 0
+MIDI	Note On			Channel 2	Note 45		Velocity 49
+MIDI	Note Off		Channel 2	Note 45		Velocity 0
+MIDI	Note On			Channel 2	Note 47		Velocity 49
+MIDI	Note Off		Channel 2	Note 47		Velocity 0
+MIDI	Note On			Channel 2	Note 49		Velocity 49
+MIDI	Note Off		Channel 2	Note 49		Velocity 0
+MIDI	Note On			Channel 2	Note 50		Velocity 49
+MIDI	Note Off		Channel 2	Note 50		Velocity 0
+MIDI	Note On			Channel 2	Note 45		Velocity 49
+MIDI	Note Off		Channel 2	Note 45		Velocity 0
+MIDI	Note On			Channel 2	Note 47		Velocity 49
+MIDI	Note Off		Channel 2	Note 47		Velocity 0
+MIDI	Note On			Channel 2	Note 49		Velocity 49
+MIDI	Note Off		Channel 2	Note 49		Velocity 0
+MIDI	Note On			Channel 2	Note 50		Velocity 49
+MIDI	Note Off		Channel 2	Note 50		Velocity 0
+MIDI	Note On			Channel 2	Note 45		Velocity 49
+MIDI	Note Off		Channel 2	Note 45		Velocity 0
+MIDI	Note On			Channel 2	Note 47		Velocity 49
+MIDI	Note Off		Channel 2	Note 47		Velocity 0
+MIDI	Note On			Channel 2	Note 49		Velocity 49
+MIDI	Note Off		Channel 2	Note 49		Velocity 0
+MIDI	Note On			Channel 2	Note 50		Velocity 49
+MIDI	Note Off		Channel 2	Note 50		Velocity 0
+MIDI	Note On			Channel 2	Note 52		Velocity 49
+MIDI	Note Off		Channel 2	Note 52		Velocity 0
+MIDI	Note On			Channel 2	Note 49		Velocity 49
+MIDI	Note Off		Channel 2	Note 49		Velocity 0
+MIDI	Note On			Channel 2	Note 45		Velocity 49
+MIDI	Note Off		Channel 2	Note 45		Velocity 0
+MIDI	Note On			Channel 2	Note 47		Velocity 49
+MIDI	Note Off		Channel 2	Note 47		Velocity 0
+MIDI	Note On			Channel 2	Note 49		Velocity 49
+MIDI	Note Off		Channel 2	Note 49		Velocity 0
+MIDI	Note On			Channel 2	Note 45		Velocity 49
+MIDI	Note Off		Channel 2	Note 45		Velocity 0
+MIDI	Note On			Channel 2	Note 47		Velocity 49
+MIDI	Note Off		Channel 2	Note 47		Velocity 0
+MIDI	Note On			Channel 2	Note 49		Velocity 49
+MIDI	Note Off		Channel 2	Note 49		Velocity 0
+MIDI	Note On			Channel 2	Note 45		Velocity 49
+MIDI	Note Off		Channel 2	Note 45		Velocity 0
+MIDI	Note On			Channel 2	Note 47		Velocity 49
+MIDI	Note Off		Channel 2	Note 47		Velocity 0
+MIDI	Note On			Channel 2	Note 49		Velocity 49
+MIDI	Note Off		Channel 2	Note 49		Velocity 0
+MIDI	Note On			Channel 2	Note 50		Velocity 49
+MIDI	Note Off		Channel 2	Note 50		Velocity 0
+MIDI	Note On			Channel 2	Note 50		Velocity 49
+MIDI	Note Off		Channel 2	Note 50		Velocity 0
+MIDI	Note On			Channel 2	Note 52		Velocity 49
+MIDI	Note Off		Channel 2	Note 52		Velocity 0
+MIDI	Note On			Channel 2	Note 53		Velocity 49
+MIDI	Note Off		Channel 2	Note 53		Velocity 0
+MIDI	Note On			Channel 2	Note 55		Velocity 49
+MIDI	Note Off		Channel 2	Note 55		Velocity 0
+MIDI	Note On			Channel 2	Note 52		Velocity 49
+MIDI	Note Off		Channel 2	Note 52		Velocity 0
+MIDI	Note On			Channel 2	Note 53		Velocity 49
+MIDI	Note Off		Channel 2	Note 53		Velocity 0
+MIDI	Note On			Channel 2	Note 55		Velocity 49
+MIDI	Note Off		Channel 2	Note 55		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 49
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 54		Velocity 49
+MIDI	Note Off		Channel 2	Note 54		Velocity 0
+MIDI	Note On			Channel 2	Note 55		Velocity 49
+MIDI	Note Off		Channel 2	Note 55		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 49
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 58		Velocity 49
+MIDI	Note Off		Channel 2	Note 58		Velocity 0
+MIDI	Note On			Channel 2	Note 52		Velocity 49
+MIDI	Note Off		Channel 2	Note 52		Velocity 0
+MIDI	Note On			Channel 2	Note 54		Velocity 49
+MIDI	Note Off		Channel 2	Note 54		Velocity 0
+MIDI	Note On			Channel 2	Note 55		Velocity 49
+MIDI	Note Off		Channel 2	Note 55		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 49
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 54		Velocity 49
+MIDI	Note Off		Channel 2	Note 54		Velocity 0
+MIDI	Note On			Channel 2	Note 55		Velocity 49
+MIDI	Note Off		Channel 2	Note 55		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 49
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 59		Velocity 49
+MIDI	Note Off		Channel 2	Note 59		Velocity 0
+MIDI	Note On			Channel 2	Note 56		Velocity 49
+MIDI	Note Off		Channel 2	Note 56		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 49
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 59		Velocity 49
+MIDI	Note Off		Channel 2	Note 59		Velocity 0
+MIDI	Note On			Channel 2	Note 60		Velocity 49
+MIDI	Note Off		Channel 2	Note 60		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 49
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 59		Velocity 49
+MIDI	Note Off		Channel 2	Note 59		Velocity 0
+MIDI	Note On			Channel 2	Note 60		Velocity 49
+MIDI	Note Off		Channel 2	Note 60		Velocity 0
+MIDI	Note On			Channel 2	Note 62		Velocity 49
+MIDI	Note Off		Channel 2	Note 62		Velocity 0
+MIDI	Note On			Channel 2	Note 59		Velocity 49
+MIDI	Note Off		Channel 2	Note 59		Velocity 0
+MIDI	Note On			Channel 2	Note 60		Velocity 49
+MIDI	Note Off		Channel 2	Note 60		Velocity 0
+MIDI	Note On			Channel 2	Note 62		Velocity 49
+MIDI	Note Off		Channel 2	Note 62		Velocity 0
+MIDI	Note On			Channel 2	Note 64		Velocity 49
+MIDI	Note Off		Channel 2	Note 64		Velocity 0
+MIDI	Note On			Channel 2	Note 61		Velocity 49
+MIDI	Note Off		Channel 2	Note 61		Velocity 0
+MIDI	Note On			Channel 2	Note 62		Velocity 49
+MIDI	Note Off		Channel 2	Note 62		Velocity 0
+MIDI	Note On			Channel 2	Note 64		Velocity 49
+MIDI	Note Off		Channel 2	Note 64		Velocity 0
+MIDI	Note On			Channel 2	Note 65		Velocity 49
+MIDI	Note Off		Channel 2	Note 65		Velocity 0
+MIDI	Note On			Channel 2	Note 53		Velocity 49
+MIDI	Note Off		Channel 2	Note 53		Velocity 0
+MIDI	Note On			Channel 2	Note 55		Velocity 49
+MIDI	Note Off		Channel 2	Note 55		Velocity 0
+MIDI	Note On			Channel 2	Note 55		Velocity 49
+MIDI	Note Off		Channel 2	Note 55		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 49
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 49
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 49
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 45		Velocity 96
+MIDI	Note Off		Channel 2	Note 45		Velocity 0
+MIDI	Note On			Channel 2	Note 47		Velocity 96
+MIDI	Note Off		Channel 2	Note 47		Velocity 0
+MIDI	Note On			Channel 2	Note 49		Velocity 96
+MIDI	Note Off		Channel 2	Note 49		Velocity 0
+MIDI	Note On			Channel 2	Note 50		Velocity 96
+MIDI	Note Off		Channel 2	Note 50		Velocity 0
+MIDI	Note On			Channel 2	Note 57		Velocity 96
+MIDI	Note Off		Channel 2	Note 57		Velocity 0
+MIDI	Note On			Channel 2	Note 59		Velocity 96
+MIDI	Note Off		Channel 2	Note 59		Velocity 0
+MIDI	Note On			Channel 2	Note 61		Velocity 96
+MIDI	Note Off		Channel 2	Note 61		Velocity 0
+MIDI	Note On			Channel 2	Note 62		Velocity 96
+MIDI	Note Off		Channel 2	Note 62		Velocity 0
+Meta	Track End
+
+
