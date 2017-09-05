@@ -4,7 +4,7 @@ mat4f::mat4f()
 {
 	for (int c = 0; c < 4; c++)
 		for (int r = 0; r < 4; r++)
-			if (c == r) _data[c][r] == 1;
+			if (c == r) _data[c][r] = 1;
 			else _data[c][r] = 0;
 }
 

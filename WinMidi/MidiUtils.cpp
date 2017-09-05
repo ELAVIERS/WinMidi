@@ -5,14 +5,14 @@
 
 using namespace std;
 
-inline string toHex(unsigned char num) //yuck
+inline string ToHex(unsigned char num) //yuck
 {
 	char buf[3];
 	sprintf_s(buf, "%X", num);
 	return (string)buf;
 }
 
-const string MidiUtils::getEventName(Event* event)
+const string MidiUtils::GetEventName(Event* event)
 {
 	if (event->type == META) {
 		using namespace Events::Meta;
@@ -84,7 +84,7 @@ const string MidiUtils::getEventName(Event* event)
 		case NoteOff:
 			return "Note Off";
 		case NoteOn:
-			return ((MidiEvent*)event)->data2 == 0 ? "Note Off" : "Note On";
+			return event->GetData()[1] == 0 ? "Note Off" : "Note On";
 		case PolyAftertouch:
 			return "Polymorphic Aftertouch";
 		case ControlChange:
@@ -98,19 +98,22 @@ const string MidiUtils::getEventName(Event* event)
 		}
 	}
 
-	return "Unknown (0x" + toHex(event->message) + ")";
+	return "Unknown (0x" + ToHex(event->message) + ")";
 }
 
-const string MidiUtils::createDisplayString(Event* event)
+const string MidiUtils::CreateDisplayString(Event* event)
 {
-	string str = (string)(event->type == META ? "Meta" : event->type == SYSTEM ? "System" : "MIDI") + "\t" + getEventName(event);
+	string pre = "";
+	if (event->delta_ticks)
+		pre = '(' + to_string(event->delta_ticks) + " Tick" + (event->delta_ticks == 1 ? "" : "s") + ")\n";
 
-	unsigned char data_count = getEventDataLength(event->message);
+	string str = (string)(event->type == META ? "Meta" : event->type == SYSTEM ? "System" : "MIDI") + "\t" + GetEventName(event);
+
+	unsigned char data_count = GetEventDataLength(event->message);
 
 	if (event->type == MIDI)
 	{
 		unsigned char msg = event->message & 0xF0;
-		MidiEvent* midEvent = (MidiEvent*)event;
 
 		if (str.length() < 13) str += '\t';//OCD here
 
@@ -123,34 +126,35 @@ const string MidiUtils::createDisplayString(Event* event)
 		case NoteOff:
 		case NoteOn:
 		case PolyAftertouch:
-			return str += "\tNote " + to_string(midEvent->data1) + "\t\tVelocity " + to_string(midEvent->data2);
+			str += "\tNote " + to_string(event->GetData()[0]) + "\t\tVelocity " + to_string(event->GetData()[1]);
+			break;
 		case ControlChange:
-			return str += "\tController " + to_string(midEvent->data1) + "\tValue " + to_string(midEvent->data2);
+			str += "\tController " + to_string(event->GetData()[0]) + "\tValue " + to_string(event->GetData()[1]);
+			break;
 		case ProgramChange:
-			return str += "\tProgram " + to_string(midEvent->data1);
+			str += "\tProgram " + to_string(event->GetData()[0]);
+			break;
 		case ChannelAftertouch:
-			return str += "\tVelocity " + to_string(midEvent->data1);
+			str += "\tVelocity " + to_string(event->GetData()[0]);
+			break;
 		}
-
-		return str;
 	}
 	else if (event->type == META)
 	{
-		MetaEvent *metaEvent = (MetaEvent*)event;
-		unsigned int len = metaEvent->getLength();
-		const unsigned char* data = metaEvent->getData();
+		unsigned int len = event->GetDataLength();
+		const unsigned char* data = event->GetData();
 
 		if (len > 0)
 			str += "\t\t";
 
 		for (unsigned int i = 0; i < len; i++)
-			str += (i == 0 ? "" : " ") + toHex(data[i]);
+			str += (i == 0 ? "" : " ") + ToHex(data[i]);
 	}
 
-	return str;
+	return pre + str;
 }
 
-unsigned char MidiUtils::getEventDataLength(unsigned char event)
+unsigned char MidiUtils::GetEventDataLength(unsigned char event)
 {
 	unsigned char instr = event & 0xF0;
 

@@ -5,10 +5,9 @@ class Event;
 
 namespace MidiUtils {
 
-	const std::string getEventName(Event* event);
+	const std::string GetEventName(Event* event);
+	const std::string CreateDisplayString(Event* event);
 
-	const std::string createDisplayString(Event* event);
-
-	unsigned char getEventDataLength(unsigned char message);
+	unsigned char GetEventDataLength(unsigned char message);
 
 };

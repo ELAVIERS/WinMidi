@@ -16,27 +16,27 @@ MidiTrack::~MidiTrack()
 	_events.clear();
 }
 
-void MidiTrack::load(const unsigned char* buffer, unsigned int& pos)
+void MidiTrack::LoadFromBuffer(const unsigned char* buffer, unsigned int& pos)
 {
-	_length = get_int_big(buffer, pos);
-
+	_length = MidiFileUtils::ReadInt(buffer, pos);
+	
 	unsigned int end = pos + _length;
 
 	while (pos < end)
 	{
-		_events.push_back(Event::load_event(buffer, pos));
+		_events.push_back(Event::LoadEvent(buffer, pos));
 	}
 }
 
 using namespace std;
 
-const string MidiTrack::getDisplayString()
+const string MidiTrack::GetDisplayString() const
 {
 	string str = "Track:\tLength:" + to_string(_length) + '\n';
 
 	for (Event* event : _events)
 	{
-		str += MidiUtils::createDisplayString(event) + '\n';
+		str += MidiUtils::CreateDisplayString(event) + '\n';
 	}
 
 	return str;

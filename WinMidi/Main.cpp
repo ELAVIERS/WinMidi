@@ -2,15 +2,20 @@
 #include <gl\GL.h>
 #include <fstream> //For event dump
 
+#include "Timer.h"
 #include "Window.h"
 #include "resource.h"
 #include "MidiFile.h"
 
+float run_time = 0.f;
+
 HINSTANCE instance;
 HDC hDvc;
+Timer timer;
 MidiFile file;
 
 //Forward declarations
+void render();
 LRESULT CALLBACK AboutProc(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK WinProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -19,31 +24,48 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE prev, LPSTR cmd_str, int cmd_
 	::instance = instance;
 
 	Window window(instance, "MainWindow", WinProc, "Hello");
-	HWND	hWnd = window.get_handle();
-		  ::hDvc = GetDC(hWnd);
+	HWND	hWnd = window.GetHandle();
+		  ::hDvc = ::GetDC(hWnd);
 	HGLRC	hGLContext = wglCreateContext(hDvc);
 
 	wglMakeCurrent(hDvc, hGLContext);
-	window.show(cmd_show);
+	window.Show(cmd_show);
 
+	bool running;
+	float delta_time = 0.f;
 	MSG msg;
-	while (::GetMessage(&msg, NULL, 0, 0) > 0)
-	{
-		::TranslateMessage(&msg);
-		::DispatchMessage(&msg);
-	}
+
+	do {
+		timer.start();
+		static char str[64];
+		snprintf(str, sizeof(str), "%f, %f FPS, %f delta", run_time, 1.f / delta_time, delta_time);
+		::SetWindowText(hWnd, str);
+
+		while (::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
+		{
+			::TranslateMessage(&msg);
+			::DispatchMessage(&msg);
+		}
+
+		if (msg.message == WM_QUIT) break;
+
+		render();
+
+		delta_time = timer.stop();
+		run_time += delta_time;
+	} while (1);
 
 	wglMakeCurrent(NULL, NULL);
-	ReleaseDC(hWnd, hDvc);
+	::ReleaseDC(hWnd, hDvc);
 	wglDeleteContext(hGLContext);
-
+	
 	return (int)msg.wParam;
 }
 
-void redraw()
+void render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3ub(255, 127, 0);
+	glColor3f(std::sin(run_time), std::sin(run_time + (3.1415 / 2)), std::sin(run_time + 3.1415));
 	glRectf(-.9f, -.9f, .9f, .9f);
 	SwapBuffers(hDvc);
 
@@ -76,15 +98,9 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 
 	switch (Msg)
 	{
-	case WM_PAINT:
-		redraw();
-
-		BeginPaint(hWnd, &paint);
-		EndPaint(hWnd, &paint);
-		break;
 	case WM_SIZE:
 		glViewport(0, 0, LOWORD(lParam), HIWORD(lParam));
-		redraw();
+		render(); //Redraw frame (might cause problems later)
 		break;
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
@@ -98,24 +114,24 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 			std::ofstream ofile;
 			ofile.open("out.txt", std::ios::out);
 
-			ofile << file.getDisplayString();
+			ofile << file.GetDisplayString();
 
 			ShellExecute(NULL, "open", "out.txt", NULL, NULL, SW_SHOWMAXIMIZED);
 			break;
 		}
 
 		case ID_FILE_OPEN:
-			file.loadFromDirectory(hWnd);
+			file.LoadFromDirectory(hWnd);
 			break;
 		}
 		break;
 
 	case WM_CLOSE:
-		DestroyWindow(hWnd);
+		::DestroyWindow(hWnd);
 		break;
 
 	case WM_DESTROY:
-		PostQuitMessage(0);
+		::PostQuitMessage(0);
 		break;
 
 	default:

@@ -11,8 +11,8 @@ MidiFile::MidiFile()
 MidiFile::~MidiFile()
 {
 }
-
-void MidiFile::loadFromDirectory(HWND owner)
+#include "Note.h"
+void MidiFile::LoadFromDirectory(HWND owner)
 {
 	IFileOpenDialog* open_dialog;
 	COMDLG_FILTERSPEC filters[] = { { L"MIDI Files", L"*.MID;*.MIDI" },{ L"All Files", L"*.*" } };
@@ -22,6 +22,7 @@ void MidiFile::loadFromDirectory(HWND owner)
 
 	if (SUCCEEDED(result)) {
 		using namespace std;
+		using namespace MidiFileUtils;
 
 		open_dialog->SetFileTypes(2, filters);
 		open_dialog->Show(owner);
@@ -52,37 +53,37 @@ void MidiFile::loadFromDirectory(HWND owner)
 
 		unsigned int pos = 0;
 
-		if (!check(buffer, pos, 4, "MThd"))
+		if (!ReadStringAndCheck(buffer, pos, 4, "MThd"))
 		{
 			ERROR_MSG("Invalid MIDI");
 			return;
 		}
 
-		header_len = get_int_big(buffer, pos);
-		if (header_len != 6)
+		_header_length = ReadInt(buffer, pos);
+		if (_header_length != 6)
 		{
-			ERROR_MSG("U WOT (header_len is not 6)");
+			ERROR_MSG("U WOT (header length is not 6)");
 			return;
 		}
 
-		format =				get_short_big(buffer, pos);
-		track_chunk_count =		get_short_big(buffer, pos);
-		short division =		get_short_big(buffer, pos);
+		_format =			ReadShort(buffer, pos);
+		_track_count =		ReadShort(buffer, pos);
+		short division =	ReadShort(buffer, pos);
 
-		useSMPTE = division & 0x8000;
+		_use_timecode = division & 0x8000;
 
-		if (useSMPTE)
+		if (_use_timecode)
 		{						   //0b0100 0000 0000 0000
-			smpte_fps = ((division & 0x4000) ? -64 : 0) + ((division & 0x3F00) >> 8); //0b0011 1111 0000 0000
-			smpte_ticks_per_frame = division & 0x00FF;
+			_timecode_fps = ((division & 0x4000) ? -64 : 0) + ((division & 0x3F00) >> 8); //0b0011 1111 0000 0000
+			_ticks_per_frame = division & 0x00FF;
 		}
 		else
-			ticks_per_beat = division;
+			_ticks_per_crotchet = division;
 
-		while (check(buffer, pos, 4, "MTrk"))
+		while (ReadStringAndCheck(buffer, pos, 4, "MTrk"))
 		{
 			MidiTrack* trk = new MidiTrack;
-			trk->load(buffer, pos);
+			trk->LoadFromBuffer(buffer, pos);
 
 			_tracks.push_back(trk);
 		}
@@ -95,15 +96,15 @@ void MidiFile::loadFromDirectory(HWND owner)
 
 using namespace std;
 
-const string MidiFile::getDisplayString()
+const string MidiFile::GetDisplayString() const
 {
-	string str = "Header:\tFormat " + to_string(format) + "\t\t" + to_string(track_chunk_count) + " Chunks\t";
+	string str = "Header:\tFormat " + to_string(_format) + "\t\t" + to_string(_track_count) + " Chunks\t";
 
-	if (useSMPTE) str += to_string(smpte_fps) + " FPS\t\t" + to_string(smpte_ticks_per_frame) + " Ticks per frame\n";
-	else str += to_string(ticks_per_beat) + " Ticks per beat\n";
+	if (_use_timecode) str += to_string(_timecode_fps) + " FPS\t\t" + to_string(_ticks_per_frame) + " Ticks per frame\n";
+	else str += to_string(_ticks_per_crotchet) + " Ticks per beat\n";
 
 	for (MidiTrack* track : _tracks)
-		str += track->getDisplayString() + "\n\n";
+		str += track->GetDisplayString() + "\n\n";
 
 	return str;
 }

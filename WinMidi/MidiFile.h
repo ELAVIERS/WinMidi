@@ -11,22 +11,25 @@ public:
 	MidiFile();
 	~MidiFile();
 
-	void loadFromDirectory(HWND owner);
+	void LoadFromDirectory(HWND owner);
 
-	const std::string getDisplayString();
+	//Getters
+	unsigned short GetFormat() const { return _format; };
+	const std::vector<MidiTrack*>& GetTracks() const { return _tracks; };
+	const std::string GetDisplayString() const;
 protected:
 	std::vector<MidiTrack*> _tracks;
 
-	unsigned int header_len;			//4 BYTES
-	unsigned short format;				//2 BYTES
-	unsigned short track_chunk_count;	//2 BYTES
+	unsigned int _header_length;			//4 BYTES
+	unsigned short _format;				//2 BYTES
+	unsigned short _track_count;	//2 BYTES
 	
-	bool useSMPTE;
+	bool _use_timecode;
 
-	unsigned short ticks_per_beat;
+	unsigned short _ticks_per_crotchet;
 
-	signed char smpte_fps;
-	unsigned char smpte_ticks_per_frame;
+	signed char _timecode_fps;
+	unsigned char _ticks_per_frame;
 
 };
 

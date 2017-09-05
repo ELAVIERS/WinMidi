@@ -9,9 +9,10 @@ public:
 	MidiTrack();
 	~MidiTrack();
 
-	void load(const unsigned char* buffer, unsigned int& pos);
+	void LoadFromBuffer(const unsigned char* buffer, unsigned int& pos);
 
-	const std::string getDisplayString();
+	const std::vector<Event*>& getEvents() const { return _events; };
+	const std::string GetDisplayString() const;
 protected:
 	std::vector<Event*> _events;
 

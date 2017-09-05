@@ -63,7 +63,7 @@ Window::~Window()
 {
 }
 
-HWND Window::make_toolbar(HINSTANCE instance)
+HWND Window::_MakeToolbar(HINSTANCE instance)
 {
 	HWND toolbar = ::CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD, 0, 0, 0, 0, _window, (HMENU)IDR_MENU, instance, NULL);
 
@@ -93,6 +93,6 @@ HWND Window::make_toolbar(HINSTANCE instance)
 	return toolbar;
 }
 
-void Window::show(int cmd_show) {
+void Window::Show(int cmd_show) {
 	::ShowWindow(_window, cmd_show);
 }
