@@ -1,5 +1,5 @@
 #pragma once
-#include <Windows.h>//Unfortunate, but we need LARGE_INTEGER
+#include <Windows.h>
 
 class Timer
 {

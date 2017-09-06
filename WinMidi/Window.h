@@ -4,9 +4,10 @@
 class Window
 {
 public:
-	Window(HINSTANCE Instance, LPCSTR ClassName, WNDPROC Procedure, LPCSTR Caption);
+	Window();
 	~Window();
 
+	void Create(HINSTANCE Instance, LPCSTR ClassName, WNDPROC Procedure, LPCSTR Caption, LPVOID param);
 	void Show(int CmdShow);
 
 	HWND GetHandle() { return _window; };

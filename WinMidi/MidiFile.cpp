@@ -1,7 +1,9 @@
 #include "MidiFile.h"
+
 #include "Shared.h"
-#include <shobjidl.h>
+
 #include <fstream>
+#include <shobjidl.h>
 
 MidiFile::MidiFile()
 {
@@ -11,7 +13,7 @@ MidiFile::MidiFile()
 MidiFile::~MidiFile()
 {
 }
-#include "Note.h"
+
 void MidiFile::LoadFromDirectory(HWND owner)
 {
 	IFileOpenDialog* open_dialog;
@@ -29,7 +31,11 @@ void MidiFile::LoadFromDirectory(HWND owner)
 
 		LPWSTR file_name;
 		IShellItem* item;
-		open_dialog->GetResult(&item);
+
+		result = open_dialog->GetResult(&item);
+		if (!SUCCEEDED(result))
+			return;
+
 		item->GetDisplayName(SIGDN_FILESYSPATH, &file_name);
 
 		ifstream file;
@@ -50,6 +56,7 @@ void MidiFile::LoadFromDirectory(HWND owner)
 
 		unsigned char *buffer = new unsigned char[buffer_len];
 		file.read((char*)buffer, buffer_len);
+		file.close();
 
 		unsigned int pos = 0;
 
@@ -87,8 +94,6 @@ void MidiFile::LoadFromDirectory(HWND owner)
 
 			_tracks.push_back(trk);
 		}
-
-		file.close();
 	}
 	else 
 		ERROR_MSG("Could not open file dialog");
@@ -107,4 +112,13 @@ const string MidiFile::GetDisplayString() const
 		str += track->GetDisplayString() + "\n\n";
 
 	return str;
+}
+
+void MidiFile::DisplayStringToFile(const char* path)
+{
+	ofstream file(path);
+
+	file << GetDisplayString();
+
+	file.close();
 }

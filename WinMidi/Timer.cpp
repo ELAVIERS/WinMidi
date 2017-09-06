@@ -1,6 +1,8 @@
 #include "Timer.h"
-#include <Windows.h>
+
 #include "Shared.h"
+
+#include <Windows.h>
 
 Timer::Timer()
 {

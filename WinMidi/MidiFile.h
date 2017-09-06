@@ -12,6 +12,7 @@ public:
 	~MidiFile();
 
 	void LoadFromDirectory(HWND owner);
+	void DisplayStringToFile(const char* path);
 
 	//Getters
 	unsigned short GetFormat() const { return _format; };
@@ -20,9 +21,9 @@ public:
 protected:
 	std::vector<MidiTrack*> _tracks;
 
-	unsigned int _header_length;			//4 BYTES
-	unsigned short _format;				//2 BYTES
-	unsigned short _track_count;	//2 BYTES
+	unsigned int _header_length;
+	unsigned short _format;
+	unsigned short _track_count;
 	
 	bool _use_timecode;
 

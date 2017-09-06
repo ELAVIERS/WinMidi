@@ -1,6 +1,7 @@
 #include "MidiEvent.h"
-#include "Shared.h"
+
 #include "MidiUtils.h"
+#include "Shared.h"
 
 Event* Event::LoadEvent(const unsigned char* buffer, unsigned int& pos)
 {

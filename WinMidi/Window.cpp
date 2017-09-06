@@ -1,10 +1,17 @@
 #include "Window.h"
-#include "Shared.h"
+
 #include "resource.h"
+#include "Shared.h"
 
-#include <CommCtrl.h>
+Window::Window()
+{
+}
 
-Window::Window(HINSTANCE instance, LPCSTR class_name, WNDPROC procedure, LPCSTR caption)
+Window::~Window()
+{
+}
+
+void Window::Create(HINSTANCE instance, LPCSTR class_name, WNDPROC procedure, LPCSTR caption, LPVOID param)
 {
 	_class.cbSize = sizeof(WNDCLASSEX);
 	_class.style = CS_OWNDC;
@@ -21,49 +28,15 @@ Window::Window(HINSTANCE instance, LPCSTR class_name, WNDPROC procedure, LPCSTR 
 
 	if (!::RegisterClassEx(&_class))
 		ERROR_MSG("Unable to register window class");
-	
-	_window = ::CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, class_name, caption, WS_OVERLAPPEDWINDOW, 
+
+	_window = ::CreateWindowEx(WS_EX_OVERLAPPEDWINDOW, class_name, caption, WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-		NULL, NULL, instance, NULL);
-	
+		NULL, NULL, instance, param);
+
 	if (!_window)ERROR_MSG("Unable to create window");
-
-	//make_toolbar(instance);
-	//too stupid right now
-
-	PIXELFORMATDESCRIPTOR pfd =
-	{
-		sizeof(PIXELFORMATDESCRIPTOR),
-		1,
-		PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
-		PFD_TYPE_RGBA,
-		32,
-		0,0,0,0,0,0,0,0,
-		0,0,0,0,0,
-		24,					//Depth bits
-		8,					//Stencil bits
-		0,
-		0,
-		0,
-		0,
-		0,
-		0
-	};
-
-	HDC device_context = GetDC(_window);
-
-	int pfd_id = ChoosePixelFormat(device_context, &pfd);
-	SetPixelFormat(device_context, pfd_id, &pfd);
-	DescribePixelFormat(device_context, pfd_id, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
-
-	ReleaseDC(_window, device_context);
 }
 
-Window::~Window()
-{
-}
-
-HWND Window::_MakeToolbar(HINSTANCE instance)
+/*HWND Window::_MakeToolbar(HINSTANCE instance) //Commctrl toolbar
 {
 	HWND toolbar = ::CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD, 0, 0, 0, 0, _window, (HMENU)IDR_MENU, instance, NULL);
 
@@ -91,7 +64,7 @@ HWND Window::_MakeToolbar(HINSTANCE instance)
 
 
 	return toolbar;
-}
+}*/
 
 void Window::Show(int cmd_show) {
 	::ShowWindow(_window, cmd_show);

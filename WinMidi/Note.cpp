@@ -1,4 +1,5 @@
 #include "Note.h"
+
 #include "Midi.h"
 #include "MidiFile.h"
 

@@ -1,7 +1,8 @@
 #include "MidiTrack.h"
-#include "Shared.h"
+
 #include "MidiEvent.h"
 #include "MidiUtils.h"
+#include "Shared.h"
 
 MidiTrack::MidiTrack()
 {
