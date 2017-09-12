@@ -1,7 +1,7 @@
 #include "Window.h"
 
 #include "resource.h"
-#include "Shared.h"
+#include "Error.h"
 
 Window::Window()
 {

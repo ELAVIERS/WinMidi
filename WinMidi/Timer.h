@@ -7,11 +7,15 @@ public:
 	Timer();
 	~Timer();
 
-	void start();
-	float stop();
+	void Start();
+	//void Pause();
+	double Stop();
 
 protected:
 	LARGE_INTEGER _start_time;
+	LARGE_INTEGER _end_time;
+
+	//LARGE_INTEGER _time;
 	LARGE_INTEGER _freq;
 };
 

@@ -1,11 +1,11 @@
 #include "MidiEvent.h"
 
 #include "MidiUtils.h"
-#include "Shared.h"
+#include "MidiFileUtils.h"
 
-Event* Event::LoadEvent(const unsigned char* buffer, unsigned int& pos)
+MidiEvent* MidiEvent::LoadEvent(const unsigned char* buffer, unsigned int& pos)
 {
-	Event* event = new Event();
+	MidiEvent* event = new MidiEvent();
 	event->delta_ticks = MidiFileUtils::ReadVariableLengthInt(buffer, pos);
 
 	if (buffer[pos] == 0xFF)
@@ -34,14 +34,22 @@ Event* Event::LoadEvent(const unsigned char* buffer, unsigned int& pos)
 	return event;
 }
 
-void Event::LoadData(const unsigned char* buffer, unsigned int& pos, unsigned char length)
+void MidiEvent::LoadData(const unsigned char* buffer, unsigned int& pos, unsigned char length)
 {
 	if (length == 0)length = buffer[pos++];
 
+	SetData(&buffer[pos], length);
+
+	pos += length;
+}
+
+void MidiEvent::SetData(const unsigned char* data, unsigned char length)
+{
 	_data_length = length;
+
 	if (_data) delete[] _data;
 	_data = new unsigned char[_data_length];
 
 	for (int i = 0; i < _data_length; i++)
-		_data[i] = buffer[pos++];
+		_data[i] = data[i];
 }

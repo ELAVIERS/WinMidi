@@ -1,8 +1,9 @@
 #include "MidiUtils.h"
 
+#include "Error.h"
 #include "Midi.h"
+#include "MidiFileUtils.h"
 #include "MidiEvent.h"
-#include "Shared.h"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ inline string ToHex(unsigned char num) //yuck
 	return (string)buf;
 }
 
-const string MidiUtils::GetEventName(Event* event)
+const string MidiUtils::GetEventName(MidiEvent* event)
 {
 	if (event->type == META) {
 		using namespace Events::Meta;
@@ -102,7 +103,7 @@ const string MidiUtils::GetEventName(Event* event)
 	return "Unknown (0x" + ToHex(event->message) + ")";
 }
 
-const string MidiUtils::CreateDisplayString(Event* event)
+const string MidiUtils::CreateDisplayString(MidiEvent* event)
 {
 	string pre = "";
 	if (event->delta_ticks)

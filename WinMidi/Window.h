@@ -15,6 +15,6 @@ protected:
 	WNDCLASSEX _class;
 	HWND _window;
 
-	HWND _MakeToolbar(HINSTANCE);
+	//HWND _MakeToolbar(HINSTANCE);
 };
 

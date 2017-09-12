@@ -1,8 +1,8 @@
 #include "MidiTrack.h"
 
 #include "MidiEvent.h"
+#include "MidiFileUtils.h"
 #include "MidiUtils.h"
-#include "Shared.h"
 
 MidiTrack::MidiTrack()
 {
@@ -11,7 +11,7 @@ MidiTrack::MidiTrack()
 
 MidiTrack::~MidiTrack()
 {
-	for (Event* event : _events)
+	for (MidiEvent* event : _events)
 		delete event;
 
 	_events.clear();
@@ -25,7 +25,7 @@ void MidiTrack::LoadFromBuffer(const unsigned char* buffer, unsigned int& pos)
 
 	while (pos < end)
 	{
-		_events.push_back(Event::LoadEvent(buffer, pos));
+		_events.push_back(MidiEvent::LoadEvent(buffer, pos));
 	}
 }
 
@@ -35,7 +35,7 @@ const string MidiTrack::GetDisplayString() const
 {
 	string str = "Track:\tLength:" + to_string(_length) + '\n';
 
-	for (Event* event : _events)
+	for (MidiEvent* event : _events)
 	{
 		str += MidiUtils::CreateDisplayString(event) + '\n';
 	}

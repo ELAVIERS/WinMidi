@@ -11,10 +11,10 @@ public:
 
 	void LoadFromBuffer(const unsigned char* buffer, unsigned int& pos);
 
-	const std::vector<Event*>& getEvents() const { return _events; };
+	const std::vector<MidiEvent*>& getEvents() const { return _events; };
 	const std::string GetDisplayString() const;
 protected:
-	std::vector<Event*> _events;
+	std::vector<MidiEvent*> _events;
 
 	unsigned int _length;
 };

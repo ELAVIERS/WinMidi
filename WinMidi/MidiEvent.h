@@ -7,23 +7,25 @@ enum EventType
 	META
 };
 
-class Event
+class MidiEvent
 {
 public:
-	Event() {};
-	~Event() { if (_data) delete[] _data; };
+	MidiEvent() {};
+	~MidiEvent() { if (_data) delete[] _data; };
 
 	EventType type;
 
 	unsigned int delta_ticks;
 	unsigned char message;
 
-	void LoadData(const unsigned char* buffer, unsigned int& pos, unsigned char length);
-	//if length is 0, length will be determined by indexed byte
+	void LoadData(const unsigned char* Buffer, unsigned int& Pos, unsigned char Length);
+
+	void SetData(const unsigned char* Data, unsigned char Length);
+
 	const unsigned char* GetData() const { return _data; };
 	const unsigned char  GetDataLength() const { return _data_length; };
 
-	static Event* LoadEvent(const unsigned char* buffer, unsigned int& pos);
+	static MidiEvent* LoadEvent(const unsigned char* Buffer, unsigned int& Pos);
 protected:
 	unsigned char* _data;
 	unsigned char _data_length;

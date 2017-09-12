@@ -1,6 +1,7 @@
 #include "MidiFile.h"
 
-#include "Shared.h"
+#include "Error.h"
+#include "MidiFileUtils.h"
 
 #include <fstream>
 #include <shobjidl.h>

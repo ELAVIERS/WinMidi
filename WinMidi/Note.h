@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-class MidiFile;
+class MidiEvent;
 
 class Note
 {
@@ -11,9 +11,7 @@ public:
 
 	void render() {};
 
-	unsigned int start, end;
+	unsigned int Start, end;
 	unsigned char pitch;
-
-	static const std::vector<Note> GetNotes(const MidiFile& file);
 };
 

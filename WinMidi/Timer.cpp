@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-#include "Shared.h"
+#include "Error.h"
 
 #include <Windows.h>
 
@@ -15,15 +15,21 @@ Timer::~Timer()
 {
 }
 
-void Timer::start()
+void Timer::Start()
 {
 	::QueryPerformanceCounter(&_start_time);
 }
 
-float Timer::stop()
+/*void Timer::Pause()
 {
-	static LARGE_INTEGER end_time;
-	::QueryPerformanceCounter(&end_time);
+	::QueryPerformanceCounter(&_end_time);
 
-	return ((float)end_time.QuadPart - (float)_start_time.QuadPart) / (float)_freq.QuadPart;
+	_time.QuadPart += _end_time.QuadPart - _start_time.QuadPart;
+}*/
+
+double Timer::Stop()
+{
+	::QueryPerformanceCounter(&_end_time);
+
+	return (double)(_end_time.QuadPart - _start_time.QuadPart) / (double)_freq.QuadPart;
 }

@@ -2,6 +2,7 @@
 
 #include "resource.h"
 #include "AboutDialog.h"
+#include "Midi.h"
 
 WinMidi::WinMidi()
 {
@@ -15,7 +16,7 @@ WinMidi::~WinMidi()
 void WinMidi::Initialise(HINSTANCE instance)
 {
 	_instance = instance;
-
+	
 	_window.Create(instance, "WinMidi_Window", WindowProcedure, "WinMidi", this);
 
 	::D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_d2d_factory);
@@ -27,24 +28,31 @@ void WinMidi::Initialise(HINSTANCE instance)
 		D2D1::HwndRenderTargetProperties(_window.GetHandle(), D2D1::SizeU(rect.right - rect.left, rect.bottom - rect.top)),
 		&_d2d_render_target);
 
+	_note_sheet.Resize(_window_size);
 }
 
 HRESULT WinMidi::Run(int cmd_show)
 {
 	_window.Show(cmd_show);
 	
-	float delta_seconds = 0;
+	double delta_seconds = 0;
 
 	while (1)
 	{
-		_timer.start();
-
 		if (!HandleMessages())
 			break;
 
-		Render(delta_seconds);
+		_timer.Start();
+		{
+			char s[50];
+			snprintf(s, 50, "Tick %d", _player.GetCurrentTick());
+			::SetWindowText(_window.GetHandle(), s);
 
-		delta_seconds = _timer.stop();
+			_player.Update(delta_seconds);
+
+			Render((float)delta_seconds);
+		}
+		delta_seconds = _timer.Stop();
 	}
 
 	return (HRESULT)_message.wParam;
@@ -64,21 +72,17 @@ bool WinMidi::HandleMessages()
 }
 
 void WinMidi::Render(float delta_seconds)
-{	//Messy!
-	static D2D1_RECT_F rect_base = D2D1::RectF(16, 16, 128, 128);
-	static D2D1_ROUNDED_RECT rect = D2D1::RoundedRect(rect_base, 8, 8);
+{
+	static ID2D1SolidColorBrush *brush;
+	if (!brush)_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0x884400), &brush);
 
 	if (_d2d_render_target)
 	{
-		static ID2D1SolidColorBrush *brush;
-		if (!brush)_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), &brush);
-
 		_d2d_render_target->BeginDraw();
-
-		_d2d_render_target->Clear(D2D1::ColorF(D2D1::ColorF::Black));
-
-		_d2d_render_target->FillRoundedRectangle(rect, brush);
-
+		_d2d_render_target->Clear(D2D1::ColorF(0));
+		
+		_note_sheet.Render(_d2d_render_target, brush, _player.GetCurrentTick());
+		
 		_d2d_render_target->EndDraw();
 	}
 }
@@ -87,8 +91,22 @@ void WinMidi::Command(int id)
 {
 	switch (id)
 	{
+	case ID_FILE_PLAY:
+		_player.Play();
+		break;
+	case ID_FILE_PAUSE:
+		_player.Pause();
+		break;
+	case ID_FILE_STOP:
+		_player.Stop();
+		break;
 	case ID_FILE_OPEN:
 		_file.LoadFromDirectory(_window.GetHandle());
+
+		_note_sheet.Load(_file.GetTracks());
+
+		_player.Stop();
+		_player.SetFile(&_file);
 		break;
 	case ID_TOOLS_DUMP:
 		_file.DisplayStringToFile("out.txt");
@@ -102,8 +120,11 @@ void WinMidi::Command(int id)
 
 void WinMidi::Resize(unsigned int width, unsigned int height)
 {
+	_window_size = D2D1::SizeU(width, height);
+	_note_sheet.Resize(_window_size);
+
 	if (_d2d_render_target) {
-		_d2d_render_target->Resize(D2D1::SizeU(width, height));
+		_d2d_render_target->Resize(_window_size);
 		Render(0); //Redraw the frame
 	}
 }

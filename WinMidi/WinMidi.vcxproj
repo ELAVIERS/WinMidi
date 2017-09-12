@@ -124,24 +124,29 @@
     <ClCompile Include="mat4f.cpp" />
     <ClCompile Include="MidiEvent.cpp" />
     <ClCompile Include="MidiFile.cpp" />
+    <ClCompile Include="MidiPlayer.cpp" />
     <ClCompile Include="MidiTrack.cpp" />
     <ClCompile Include="MidiUtils.cpp" />
     <ClCompile Include="Note.cpp" />
+    <ClCompile Include="NoteSheet.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WinMidi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDialog.h" />
+    <ClInclude Include="Error.h" />
     <ClInclude Include="mat4f.h" />
     <ClInclude Include="Midi.h" />
     <ClInclude Include="MidiEvent.h" />
     <ClInclude Include="MidiFile.h" />
+    <ClInclude Include="MidiPlayer.h" />
     <ClInclude Include="MidiTrack.h" />
     <ClInclude Include="MidiUtils.h" />
     <ClInclude Include="Note.h" />
+    <ClInclude Include="NoteSheet.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Shared.h" />
+    <ClInclude Include="MidiFileUtils.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WinMidi.h" />
