@@ -7,7 +7,7 @@
 Timer::Timer()
 {
 	if (!QueryPerformanceFrequency(&_freq))
-		ERROR_MSG("We're not in 1998; I'm not supporting your bad timer.");
+		Error::ErrorMessage("We're not in 1998; I'm not supporting your bad timer.");
 }
 
 
@@ -19,13 +19,6 @@ void Timer::Start()
 {
 	::QueryPerformanceCounter(&_start_time);
 }
-
-/*void Timer::Pause()
-{
-	::QueryPerformanceCounter(&_end_time);
-
-	_time.QuadPart += _end_time.QuadPart - _start_time.QuadPart;
-}*/
 
 double Timer::Stop()
 {

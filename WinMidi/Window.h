@@ -7,14 +7,10 @@ public:
 	Window();
 	~Window();
 
-	void Create(HINSTANCE Instance, LPCSTR ClassName, WNDPROC Procedure, LPCSTR Caption, LPVOID param);
+	void Initialise(LPCTSTR ClassName, HINSTANCE Instance, LPCTSTR Title, LPVOID Parameter);
 	void Show(int CmdShow);
 
-	HWND GetHandle() { return _window; };
-protected:
-	WNDCLASSEX _class;
-	HWND _window;
-
-	//HWND _MakeToolbar(HINSTANCE);
+	inline HWND GetHandle() { return _hwnd; };
+private:
+	HWND	_hwnd;
 };
-

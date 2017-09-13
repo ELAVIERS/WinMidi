@@ -68,7 +68,7 @@ const string MidiUtils::GetEventName(MidiEvent* event)
 			return "Tune Request";
 		case TimingClock:
 			return "Timing Clock";
-		case Start:
+		case start:
 			return "Start";
 		case Continue:
 			return "Continue";
@@ -163,7 +163,7 @@ unsigned char MidiUtils::GetEventDataLength(unsigned char event)
 	if (instr == 0xF0) //If system event
 	{
 		if (event == Events::System::SystemExclusive || event == Events::System::SystemExclusiveEnd)
-			ERROR_MSG("yo dood don't call get_event_data_count on a sysex event srsly y u do dis");
+			Error::ErrorMessage("yo dood don't call get_event_data_count on a sysex event srsly y u do dis");
 
 		switch (event)
 		{

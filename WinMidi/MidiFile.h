@@ -14,12 +14,10 @@ public:
 	void LoadFromDirectory(HWND owner);
 	void DisplayStringToFile(const char* path);
 
-	//Setters
-	inline void SetEventCallback(void* Object, void(*Callback)(void*, const MidiEvent*))
-	{
-		_callback_owner = Object;
-		_callback = Callback;
-	};
+	//Tracks
+	void ResetTracks();
+	void Update(unsigned int DeltaTicks);
+	void SetCallback(void* Owner, void(*Callback)(void*, const MidiEvent*));
 
 	//Getters
 	inline unsigned short GetFormat() const					{ return _format; };
@@ -28,22 +26,18 @@ public:
 
 	const std::string GetDisplayString() const;
 protected:
-	std::vector<MidiTrack*> _tracks;
-	
-	//Callback
-	void* _callback_owner;
-	void(*_callback)(void*, const MidiEvent*);
+	std::vector<MidiTrack*>	_tracks;
 
 	//Header
-	unsigned int _header_length;
-	unsigned short _format;
-	unsigned short _track_count;
+	unsigned int			_header_length;
+	unsigned short			_format;
+	unsigned short			_track_count;
 
 	//Timecode
-	bool _use_timecode;
-	unsigned short _ticks_per_crotchet;
-	signed char _timecode_fps;
-	unsigned char _ticks_per_frame;
+	bool					_use_timecode;
+	unsigned short			_ticks_per_crotchet;
+	signed char				_timecode_fps;
+	unsigned char			_ticks_per_frame;
 
 };
 

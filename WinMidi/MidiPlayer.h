@@ -11,7 +11,7 @@ public:
 
 	inline void Play()	{ _playing = true; };
 	inline void Pause() { _playing = false; };
-	inline void Stop()	{ Pause(); _tick = 0; };
+	void Stop();
 
 	void Update(double DeltaSeconds);
 
@@ -19,8 +19,8 @@ public:
 
 	unsigned int GetCurrentTick() { return _tick; };
 protected:
-	void HandleEvent(const MidiEvent* MidiEvent);
-	static void Callback(void*, const MidiEvent*);
+	void _HandleEvent(const MidiEvent* MidiEvent);
+	static void _Callback(void*, const MidiEvent*);
 
 	////////////////Player
 	bool			_playing;
@@ -28,8 +28,8 @@ protected:
 	double			_seconds_per_tick;
 
 	////////////////File
-	MidiFile* _file;
+	MidiFile*		_file;
 
-	int _ticks_per_crotchet;
+	int				_ticks_per_crotchet;
 };
 

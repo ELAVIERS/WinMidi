@@ -1,17 +1,11 @@
 #pragma once
-#include <vector>
-
-class MidiEvent;
 
 class Note
 {
 public:
-	Note();
-	~Note();
+	Note() {};
+	~Note() {};
 
-	void render() {};
-
-	unsigned int Start, end;
+	unsigned int start, end;
 	unsigned char pitch;
 };
-

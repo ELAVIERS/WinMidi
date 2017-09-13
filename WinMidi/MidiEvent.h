@@ -13,20 +13,18 @@ public:
 	MidiEvent() {};
 	~MidiEvent() { if (_data) delete[] _data; };
 
-	EventType type;
+	EventType		type;
 
-	unsigned int delta_ticks;
-	unsigned char message;
+	unsigned int	delta_ticks;
+	unsigned char	message;
 
+	static MidiEvent* LoadEvent(const unsigned char* Buffer, unsigned int& Pos);
 	void LoadData(const unsigned char* Buffer, unsigned int& Pos, unsigned char Length);
-
 	void SetData(const unsigned char* Data, unsigned char Length);
 
 	const unsigned char* GetData() const { return _data; };
 	const unsigned char  GetDataLength() const { return _data_length; };
-
-	static MidiEvent* LoadEvent(const unsigned char* Buffer, unsigned int& Pos);
 protected:
-	unsigned char* _data;
-	unsigned char _data_length;
+	unsigned char*	_data;
+	unsigned char	_data_length;
 };

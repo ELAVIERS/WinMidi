@@ -15,10 +15,11 @@ WinMidi::~WinMidi()
 
 void WinMidi::Initialise(HINSTANCE instance)
 {
-	_instance = instance;
-	
-	_window.Create(instance, "WinMidi_Window", WindowProcedure, "WinMidi", this);
+	//Create window
+	_window_class.Initialise("WinMidi_Window", instance, MAKEINTRESOURCE(IDR_MENU), _WindowProcedure);
+	_window.Initialise("WinMidi_Window", instance, "WinMidi", this);
 
+	//Direct2D
 	::D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_d2d_factory);
 
 	RECT rect;
@@ -28,6 +29,7 @@ void WinMidi::Initialise(HINSTANCE instance)
 		D2D1::HwndRenderTargetProperties(_window.GetHandle(), D2D1::SizeU(rect.right - rect.left, rect.bottom - rect.top)),
 		&_d2d_render_target);
 
+	//Other
 	_note_sheet.Resize(_window_size);
 }
 
@@ -35,12 +37,19 @@ HRESULT WinMidi::Run(int cmd_show)
 {
 	_window.Show(cmd_show);
 	
-	double delta_seconds = 0;
+	double	delta_seconds = 0;
+	MSG		msg;
 
 	while (1)
 	{
-		if (!HandleMessages())
-			break;
+		while (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT)
+				return (HRESULT)msg.wParam;
+
+			::TranslateMessage(&msg);
+			::DispatchMessage (&msg);
+		}
 
 		_timer.Start();
 		{
@@ -50,28 +59,13 @@ HRESULT WinMidi::Run(int cmd_show)
 
 			_player.Update(delta_seconds);
 
-			Render((float)delta_seconds);
+			_Render((float)delta_seconds);
 		}
 		delta_seconds = _timer.Stop();
 	}
-
-	return (HRESULT)_message.wParam;
 }
 
-bool WinMidi::HandleMessages()
-{
-	while (::PeekMessage(&_message, NULL, 0, 0, PM_REMOVE))
-	{
-		if (_message.message == WM_QUIT)
-			return false;
-		::TranslateMessage(&_message);
-		::DispatchMessage(&_message);
-	}
-
-	return true;
-}
-
-void WinMidi::Render(float delta_seconds)
+void WinMidi::_Render(float delta_seconds)
 {
 	static ID2D1SolidColorBrush *brush;
 	if (!brush)_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0x884400), &brush);
@@ -105,15 +99,15 @@ void WinMidi::Command(int id)
 
 		_note_sheet.Load(_file.GetTracks());
 
-		_player.Stop();
 		_player.SetFile(&_file);
+		_player.Stop();
 		break;
 	case ID_TOOLS_DUMP:
 		_file.DisplayStringToFile("out.txt");
 		::ShellExecute(NULL, "open", "out.txt", NULL, NULL, SW_SHOWMAXIMIZED);
 		break;
 	case ID_HELP_ABOUT:
-		AboutDialog::Open(_instance, _window.GetHandle());
+		AboutDialog::Open(NULL, _window.GetHandle());
 		break;
 	}
 }
@@ -125,12 +119,12 @@ void WinMidi::Resize(unsigned int width, unsigned int height)
 
 	if (_d2d_render_target) {
 		_d2d_render_target->Resize(_window_size);
-		Render(0); //Redraw the frame
+		_Render(0); //Redraw the frame
 	}
 }
 
 //Static window procedure
-LRESULT CALLBACK WinMidi::WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WinMidi::_WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (msg == WM_CREATE)
 	{

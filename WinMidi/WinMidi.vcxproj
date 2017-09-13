@@ -127,10 +127,10 @@
     <ClCompile Include="MidiPlayer.cpp" />
     <ClCompile Include="MidiTrack.cpp" />
     <ClCompile Include="MidiUtils.cpp" />
-    <ClCompile Include="Note.cpp" />
     <ClCompile Include="NoteSheet.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="WindowClass.cpp" />
     <ClCompile Include="WinMidi.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +149,7 @@
     <ClInclude Include="MidiFileUtils.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="WindowClass.h" />
     <ClInclude Include="WinMidi.h" />
   </ItemGroup>
   <ItemGroup>

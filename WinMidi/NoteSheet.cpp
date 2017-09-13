@@ -18,6 +18,11 @@ NoteSheet::~NoteSheet()
 	delete[] _notes;
 }
 
+inline D2D1_COLOR_F ScaleColour(D2D1_COLOR_F color, float amount)
+{
+	return D2D1::ColorF(color.r * amount, color.g * amount, color.b * amount);
+}
+
 using namespace std;
 
 void NoteSheet::Load(const vector<MidiTrack*>& tracks)
@@ -45,7 +50,7 @@ void NoteSheet::Load(const vector<MidiTrack*>& tracks)
 				if (op == Events::Midi::NoteOn && vel)
 				{
 					Note new_note;
-					new_note.Start = tick;
+					new_note.start = tick;
 					new_note.pitch = event->GetData()[0];
 					new_note.end = 0;
 					_notes[i].push_back(new_note);
@@ -70,7 +75,7 @@ void NoteSheet::Load(const vector<MidiTrack*>& tracks)
 	}
 }
 
-void NoteSheet::Render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrush* brush, float tick)
+void NoteSheet::Render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrush* brush, unsigned int tick)
 {
 	static D2D1_COLOR_F color;
 
@@ -80,16 +85,16 @@ void NoteSheet::Render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrus
 	{
 		for (const Note& note : _notes[i])
 		{
-			if (note.end + _x_offset < tick || note.Start + _x_offset >(tick + _size.width))
+			if (note.end + _x_offset < tick || note.start + _x_offset >(tick + _size.width))
 				continue;
 
-			if (tick >= note.Start && tick <= note.end)
+			if (tick >= note.start && tick <= note.end)
 				brush->SetColor(D2D1::ColorF(0xFFFFFF));
 			else
 				brush->SetColor(TRACK_COLOURS[i % TRACK_COLOUR_COUNT]);
 
 			render_target->FillRectangle(D2D1::RectF(
-				(float)(signed int)(note.Start - tick + _x_offset), _size.height - (row_width * (note.pitch - _min_pitch + 1)),
+				(float)(signed int)(note.start - tick + _x_offset), _size.height - (row_width * (note.pitch - _min_pitch + 1)),
 				(float)(signed int)(note.end - tick + _x_offset),	_size.height - (row_width * (note.pitch - _min_pitch))
 			), brush);
 		}

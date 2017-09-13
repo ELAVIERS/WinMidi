@@ -6,6 +6,5 @@ int APIENTRY WinMain(HINSTANCE instance, HINSTANCE prev, LPSTR cmd_str, int cmd_
 {
 	WinMidi process;
 	process.Initialise(instance);
-
 	return process.Run(cmd_show);
 }

@@ -15,6 +15,9 @@ MidiFile::~MidiFile()
 {
 }
 
+using namespace std;
+using namespace Error;
+
 void MidiFile::LoadFromDirectory(HWND owner)
 {
 	IFileOpenDialog* open_dialog;
@@ -24,7 +27,6 @@ void MidiFile::LoadFromDirectory(HWND owner)
 		CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&open_dialog));
 
 	if (SUCCEEDED(result)) {
-		using namespace std;
 		using namespace MidiFileUtils;
 
 		open_dialog->SetFileTypes(2, filters);
@@ -43,7 +45,7 @@ void MidiFile::LoadFromDirectory(HWND owner)
 		file.open(file_name, ios::in | ios::binary);
 
 		if (!file.is_open()) {
-			ERROR_MSG("Could not open");
+			ErrorMessage("Could not open");
 			return;
 		}
 
@@ -63,14 +65,14 @@ void MidiFile::LoadFromDirectory(HWND owner)
 
 		if (!ReadStringAndCheck(buffer, pos, 4, "MThd"))
 		{
-			ERROR_MSG("Invalid MIDI");
+			ErrorMessage("Invalid MIDI");
 			return;
 		}
 
 		_header_length = ReadInt(buffer, pos);
 		if (_header_length != 6)
 		{
-			ERROR_MSG("U WOT (header length is not 6)");
+			ErrorMessage("U WOT (header length is not 6)");
 			return;
 		}
 
@@ -97,10 +99,8 @@ void MidiFile::LoadFromDirectory(HWND owner)
 		}
 	}
 	else 
-		ERROR_MSG("Could not open file dialog");
+		ErrorMessage("Could not open file dialog");
 }
-
-using namespace std;
 
 const string MidiFile::GetDisplayString() const
 {
@@ -113,6 +113,24 @@ const string MidiFile::GetDisplayString() const
 		str += track->GetDisplayString() + "\n\n";
 
 	return str;
+}
+
+void MidiFile::ResetTracks()
+{
+	for (MidiTrack* track : _tracks)
+		track->Reset();
+}
+
+void MidiFile::Update(unsigned int delta_ticks)
+{
+	for (MidiTrack* track : _tracks)
+		track->Update(delta_ticks);
+}
+
+void MidiFile::SetCallback(void* owner, void(*callback)(void*, const MidiEvent*))
+{
+	for (MidiTrack* track : _tracks)
+		track->SetCallback(owner, callback);
 }
 
 void MidiFile::DisplayStringToFile(const char* path)

@@ -4,7 +4,7 @@
 #include "MidiFileUtils.h"
 #include "MidiUtils.h"
 
-MidiTrack::MidiTrack()
+MidiTrack::MidiTrack() : _ticks(0), _next_event(0)
 {
 }
 
@@ -15,6 +15,21 @@ MidiTrack::~MidiTrack()
 		delete event;
 
 	_events.clear();
+}
+
+void MidiTrack::Update(unsigned int delta_ticks)
+{
+	_ticks += delta_ticks;
+
+	if (_next_event < _events.size() && _ticks >= _events[_next_event]->delta_ticks)
+	{
+		_ticks -= _events[_next_event]->delta_ticks;
+
+		if (_callback)
+			_callback(_callback_owner, _events[_next_event]);
+
+		_next_event++;
+	}
 }
 
 void MidiTrack::LoadFromBuffer(const unsigned char* buffer, unsigned int& pos)
