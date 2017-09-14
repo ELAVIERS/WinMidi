@@ -38,7 +38,7 @@ protected:
 	NoteSheet				_note_sheet;
 	unsigned short			_track_count;
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	void _Render(float DeltaSeconds);
+	void _Render(double DeltaSeconds);
 
 	static LRESULT CALLBACK _WindowProcedure(HWND WindowHandle, UINT Message, WPARAM WideParam, LPARAM LongParam);
 };

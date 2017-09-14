@@ -30,9 +30,6 @@
     <ClCompile Include="MidiEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mat4f.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MidiUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Midi.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mat4f.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MidiUtils.h">

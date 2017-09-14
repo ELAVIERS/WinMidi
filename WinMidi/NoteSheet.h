@@ -19,13 +19,16 @@ public:
 	inline unsigned char getMaximumPitch() { return _max_pitch; };
 	inline unsigned char getMinimumPitch() { return _min_pitch; };
 protected:
-	std::vector<Note>*	_notes;
-	unsigned short		_track_count;
+	std::vector<Note>*			_notes;
+	std::vector<D2D1_RECT_F>*	_rects;
+	unsigned short				_track_count;
 
-	unsigned char		_max_pitch;
-	unsigned char		_min_pitch;
-	int					_x_offset;
+	unsigned char				_max_pitch;
+	unsigned char				_min_pitch;
+	int							_x_offset;
 
-	D2D1_SIZE_U			_size;
+	D2D1_SIZE_U					_size;
+
+	void _BakeRects();
 };
 

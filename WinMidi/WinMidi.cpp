@@ -25,8 +25,11 @@ void WinMidi::Initialise(HINSTANCE instance)
 	RECT rect;
 	::GetClientRect(_window.GetHandle(), &rect);
 
-	_d2d_factory->CreateHwndRenderTarget(D2D1::RenderTargetProperties(),
-		D2D1::HwndRenderTargetProperties(_window.GetHandle(), D2D1::SizeU(rect.right - rect.left, rect.bottom - rect.top)),
+	_d2d_factory->CreateHwndRenderTarget(
+			D2D1::RenderTargetProperties(),
+			D2D1::HwndRenderTargetProperties(_window.GetHandle(), 
+			D2D1::SizeU(rect.right - rect.left, rect.bottom - rect.top), 
+			D2D1_PRESENT_OPTIONS_IMMEDIATELY),
 		&_d2d_render_target);
 
 	//Other
@@ -52,23 +55,22 @@ HRESULT WinMidi::Run(int cmd_show)
 		}
 
 		_timer.Start();
-		{
-			char s[50];
-			snprintf(s, 50, "Tick %d", _player.GetCurrentTick());
-			::SetWindowText(_window.GetHandle(), s);
+		_player.Update	(delta_seconds);
 
-			_player.Update(delta_seconds);
+		static char s[32];
+		snprintf(s, 32, "Tick %u, %lf Delta", _player.GetCurrentTick(), delta_seconds);
+		::SetWindowText(_window.GetHandle(), s);
 
-			_Render((float)delta_seconds);
-		}
+		_Render			(delta_seconds);
 		delta_seconds = _timer.Stop();
 	}
 }
 
-void WinMidi::_Render(float delta_seconds)
+void WinMidi::_Render(double delta_seconds)
 {
 	static ID2D1SolidColorBrush *brush;
-	if (!brush)_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0x884400), &brush);
+	if (!brush)
+		_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0), &brush);
 
 	if (_d2d_render_target)
 	{

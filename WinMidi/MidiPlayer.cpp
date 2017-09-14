@@ -44,8 +44,9 @@ void MidiPlayer::Update(double delta_seconds)
 	{
 		ticks = (int)(elapsed_time / _seconds_per_tick);
 		_file->Update(ticks);
-		elapsed_time -= _seconds_per_tick * ticks;
 		_tick += ticks;
+
+		elapsed_time -= _seconds_per_tick * ticks;
 	}
 }
 

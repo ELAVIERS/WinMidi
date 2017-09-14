@@ -68,7 +68,7 @@ const string MidiUtils::GetEventName(MidiEvent* event)
 			return "Tune Request";
 		case TimingClock:
 			return "Timing Clock";
-		case start:
+		case Start:
 			return "Start";
 		case Continue:
 			return "Continue";

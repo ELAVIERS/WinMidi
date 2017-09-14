@@ -23,7 +23,7 @@ namespace Events
 			TuneRequest =		0xF6,
 			SystemExclusiveEnd =0xF7,
 			TimingClock =		0xF8,
-			start =				0xFA,
+			Start =				0xFA,
 			Continue =			0xFB,
 			Stop =				0xFC,
 			ActiveSensing =		0xFE
