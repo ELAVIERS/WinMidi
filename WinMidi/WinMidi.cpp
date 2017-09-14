@@ -1,8 +1,9 @@
 #include "WinMidi.h"
 
-#include "resource.h"
+#include "Error.h"
 #include "AboutDialog.h"
 #include "Midi.h"
+#include "resource.h"
 
 WinMidi::WinMidi()
 {
@@ -18,6 +19,7 @@ void WinMidi::Initialise(HINSTANCE instance)
 	//Create window
 	_window_class.Initialise("WinMidi_Window", instance, MAKEINTRESOURCE(IDR_MENU), _WindowProcedure);
 	_window.Initialise("WinMidi_Window", instance, "WinMidi", this);
+	_accelerators = ::LoadAccelerators(instance, MAKEINTRESOURCE(IDR_ACCELERATORS));
 
 	//Direct2D
 	::D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_d2d_factory);
@@ -50,23 +52,30 @@ HRESULT WinMidi::Run(int cmd_show)
 			if (msg.message == WM_QUIT)
 				return (HRESULT)msg.wParam;
 
-			::TranslateMessage(&msg);
-			::DispatchMessage (&msg);
+			if (!::TranslateAccelerator(_window.GetHandle(), _accelerators, &msg))
+			{
+				::TranslateMessage(&msg);
+				::DispatchMessage(&msg);
+			}
 		}
 
 		_timer.Start();
-		_player.Update	(delta_seconds);
-
-		static char s[32];
-		snprintf(s, 32, "Tick %u, %lf Delta", _player.GetCurrentTick(), delta_seconds);
-		::SetWindowText(_window.GetHandle(), s);
-
-		_Render			(delta_seconds);
+		_Update(delta_seconds);
+		_Render();
 		delta_seconds = _timer.Stop();
 	}
 }
 
-void WinMidi::_Render(double delta_seconds)
+void WinMidi::_Update(double delta_seconds)
+{
+	_player.Update(delta_seconds);
+
+	static char s[32];
+	snprintf(s, 32, "Tick %u", _player.GetCurrentTick());
+	::SetWindowText(_window.GetHandle(), s);
+}
+
+void WinMidi::_Render()
 {
 	static ID2D1SolidColorBrush *brush;
 	if (!brush)
@@ -75,11 +84,57 @@ void WinMidi::_Render(double delta_seconds)
 	if (_d2d_render_target)
 	{
 		_d2d_render_target->BeginDraw();
-		_d2d_render_target->Clear(D2D1::ColorF(0));
+		_d2d_render_target->Clear(D2D1::ColorF(0x222222));
 		
 		_note_sheet.Render(_d2d_render_target, brush, _player.GetCurrentTick());
+
+		brush->SetColor(D2D1::ColorF(0x888888));
+		_d2d_render_target->DrawLine(D2D1::Point2F((float)_player.GetCurrentTick(), 0), D2D1::Point2F((float)_player.GetCurrentTick(), 255),
+			brush, 2);
 		
 		_d2d_render_target->EndDraw();
+	}
+}
+
+void WinMidi::_ToggleFullscreen()
+{
+	static bool fullscreen = false;
+	static RECT winSize;
+	static bool maximised;
+	static HMENU menu;
+
+	HWND hwnd = _window.GetHandle();
+
+	fullscreen = !fullscreen;
+
+	if (fullscreen)
+	{
+		maximised = ::IsZoomed(hwnd);
+
+		HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+		MONITORINFO info = { sizeof(info) };
+		if (!GetMonitorInfo(monitor, &info))
+			Error::ErrorMessage("Could not obtain monitor info");
+
+		::GetWindowRect(hwnd, &winSize);
+
+		menu = ::GetMenu(hwnd);
+		::SetMenu(hwnd, NULL);
+
+		::SetWindowLong(hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+		::SetWindowPos(hwnd, NULL, 0, 0, info.rcMonitor.right, info.rcMonitor.bottom, SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+	}
+	else
+	{
+		::SetWindowLong(_window.GetHandle(), GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+	
+		if (maximised)
+			::SendMessage(hwnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+		else
+			::SetWindowPos(_window.GetHandle(), NULL, winSize.left, winSize.top, winSize.right - winSize.left, winSize.bottom - winSize.top, 
+				SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+
+		::SetMenu(_window.GetHandle(), menu);
 	}
 }
 
@@ -87,16 +142,8 @@ void WinMidi::Command(int id)
 {
 	switch (id)
 	{
-	case ID_FILE_PLAY:
-		_player.Play();
-		break;
-	case ID_FILE_PAUSE:
-		_player.Pause();
-		break;
-	case ID_FILE_STOP:
-		_player.Stop();
-		break;
 	case ID_FILE_OPEN:
+	case IDA_OPEN:
 		_file.LoadFromDirectory(_window.GetHandle());
 
 		_note_sheet.Load(_file.GetTracks());
@@ -104,6 +151,22 @@ void WinMidi::Command(int id)
 		_player.SetFile(&_file);
 		_player.Stop();
 		break;
+
+	case ID_FILE_PLAY:
+	case IDA_PLAY:
+		_player.Toggle();
+		break;
+
+	case ID_FILE_STOP:
+	case IDA_STOP:
+		_player.Stop();
+		break;
+
+	case ID_VIEW_FULLSCREEN:
+	case IDA_FULLSCREEN:
+		_ToggleFullscreen();
+		break;
+
 	case ID_TOOLS_DUMP:
 		_file.DisplayStringToFile("out.txt");
 		::ShellExecute(NULL, "open", "out.txt", NULL, NULL, SW_SHOWMAXIMIZED);
@@ -121,7 +184,7 @@ void WinMidi::Resize(unsigned int width, unsigned int height)
 
 	if (_d2d_render_target) {
 		_d2d_render_target->Resize(_window_size);
-		_Render(0); //Redraw the frame
+		_Render(); //Redraw the frame
 	}
 }
 
@@ -138,8 +201,6 @@ LRESULT CALLBACK WinMidi::_WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, L
 		return 1;
 	}
 
-	WinMidi *win_midi = (WinMidi*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-
 	switch (msg)
 	{
 	case WM_DESTROY:
@@ -150,10 +211,10 @@ LRESULT CALLBACK WinMidi::_WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, L
 		break;
 
 	case WM_COMMAND:
-		win_midi->Command(LOWORD(wParam));
+		((WinMidi*)::GetWindowLongPtr(hWnd, GWLP_USERDATA))->Command(LOWORD(wParam));
 		break;
 	case WM_SIZE:
-		win_midi->Resize(LOWORD(lParam), HIWORD(lParam));
+		((WinMidi*)::GetWindowLongPtr(hWnd, GWLP_USERDATA))->Resize(LOWORD(lParam), HIWORD(lParam));
 		break;
 	default:
 		return ::DefWindowProc(hWnd, msg, wParam, lParam);

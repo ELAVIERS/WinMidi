@@ -30,6 +30,7 @@ protected:
 	WindowClass				_window_class;
 	Window					_window;
 	D2D1_SIZE_U				_window_size;
+	HACCEL					_accelerators;
 
 	//Runtime
 	Timer					_timer;
@@ -38,7 +39,9 @@ protected:
 	NoteSheet				_note_sheet;
 	unsigned short			_track_count;
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	void _Render(double DeltaSeconds);
+	void _Update(double DeltaSeconds);
+	void _Render();
+	void _ToggleFullscreen();
 
 	static LRESULT CALLBACK _WindowProcedure(HWND WindowHandle, UINT Message, WPARAM WideParam, LPARAM LongParam);
 };

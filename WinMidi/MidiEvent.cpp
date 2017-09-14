@@ -53,3 +53,15 @@ void MidiEvent::SetData(const unsigned char* data, unsigned char length)
 	for (int i = 0; i < _data_length; i++)
 		_data[i] = data[i];
 }
+
+DWORD MidiEvent::ToDWORD() const
+{
+	DWORD word = message;
+
+	if (_data_length > 0)
+		word |= (_data[0] << 8);
+	if (_data_length > 1)
+		word |= (_data[1] << 16);
+
+	return word;
+}

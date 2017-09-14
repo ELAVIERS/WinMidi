@@ -1,4 +1,5 @@
 #pragma once
+#include <Windows.h>
 
 enum EventType
 {
@@ -24,6 +25,8 @@ public:
 
 	const unsigned char* GetData() const { return _data; };
 	const unsigned char  GetDataLength() const { return _data_length; };
+
+	DWORD ToDWORD() const;
 protected:
 	unsigned char*	_data;
 	unsigned char	_data_length;

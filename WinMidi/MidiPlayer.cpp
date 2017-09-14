@@ -7,11 +7,15 @@
 
 MidiPlayer::MidiPlayer()
 {
+	HRESULT result = ::midiOutOpen(&_midi_out, MIDI_MAPPER, NULL, 0, CALLBACK_NULL);
+	if (result != MMSYSERR_NOERROR)
+		Error::ErrorMessage("Could not open MIDI mapper");
 }
 
 
 MidiPlayer::~MidiPlayer()
 {
+	::midiOutClose(_midi_out);
 }
 
 void MidiPlayer::Stop()
@@ -69,7 +73,11 @@ void MidiPlayer::_HandleEvent(const MidiEvent* event)
 			_seconds_per_tick = ((data[0] << 16) + (data[1] << 8) + data[2]) / 1000000.0 / _ticks_per_crotchet;
 			break;
 		}
+
+		return;
 	}
 
-
+	HRESULT result = ::midiOutShortMsg(_midi_out, event->ToDWORD());
+	if (result != MMSYSERR_NOERROR)
+		Error::ErrorMessage("MIDI mapper message playback error");
 }
