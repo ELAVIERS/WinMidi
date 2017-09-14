@@ -61,9 +61,6 @@ void MidiPlayer::_Callback(void* owner, const MidiEvent* event)
 
 void MidiPlayer::_HandleEvent(const MidiEvent* event)
 {
-	if (_file->GetDivision() & 0x8000)
-		Error::ErrorMessage("SMPTE timecodes not supported yet mate");
-
 	if (event->type == META)
 	{
 		switch (event->message)
@@ -77,7 +74,5 @@ void MidiPlayer::_HandleEvent(const MidiEvent* event)
 		return;
 	}
 
-	HRESULT result = ::midiOutShortMsg(_midi_out, event->ToDWORD());
-	if (result != MMSYSERR_NOERROR)
-		Error::ErrorMessage("MIDI mapper message playback error");
+	::midiOutShortMsg(_midi_out, event->ToDWORD());
 }

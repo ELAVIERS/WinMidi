@@ -6,7 +6,7 @@ void AboutDialog::Open(HINSTANCE instance, HWND owner)
 	::DialogBox(instance, MAKEINTRESOURCE(IDD_ABOUT), owner, Procedure);
 }
 
-LRESULT CALLBACK AboutDialog::Procedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK AboutDialog::Procedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{

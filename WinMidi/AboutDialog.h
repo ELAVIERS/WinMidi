@@ -5,5 +5,5 @@ namespace AboutDialog //Functions that handle the about dialog
 {
 	void Open(HINSTANCE instance, HWND owner);
 
-	LRESULT CALLBACK Procedure(HWND, UINT, WPARAM, LPARAM);
+	INT_PTR CALLBACK Procedure(HWND, UINT, WPARAM, LPARAM);
 }

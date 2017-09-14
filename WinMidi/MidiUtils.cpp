@@ -162,8 +162,10 @@ unsigned char MidiUtils::GetEventDataLength(unsigned char event)
 
 	if (instr == 0xF0) //If system event
 	{
-		if (event == Events::System::SystemExclusive || event == Events::System::SystemExclusiveEnd)
+		if (event == Events::System::SystemExclusive || event == Events::System::SystemExclusiveEnd) {
 			Error::ErrorMessage("yo dood don't call get_event_data_count on a sysex event srsly y u do dis");
+			return 0;
+		}
 
 		switch (event)
 		{
