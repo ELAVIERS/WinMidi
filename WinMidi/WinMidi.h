@@ -25,7 +25,6 @@ public:
 	inline void LoadMIDIFile(const char* File) 
 	{	
 			_file.LoadFromFile(File); 
-			_player.SetFile(&_file); 
 			_note_sheet.Load(_file.GetTracks());
 	};
 protected:

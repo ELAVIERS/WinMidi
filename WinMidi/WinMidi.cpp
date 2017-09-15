@@ -37,6 +37,7 @@ void WinMidi::Initialise(HINSTANCE instance)
 	_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0), &_brush);
 
 	//Other
+	_player.SetFile(&_file);
 	_note_sheet.Resize(_window_size);
 }
 
