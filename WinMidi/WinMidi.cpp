@@ -34,6 +34,8 @@ void WinMidi::Initialise(HINSTANCE instance)
 			D2D1_PRESENT_OPTIONS_IMMEDIATELY),
 		&_d2d_render_target);
 
+	_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0), &_brush);
+
 	//Other
 	_note_sheet.Resize(_window_size);
 }
@@ -44,7 +46,7 @@ HRESULT WinMidi::Run(int cmd_show)
 	
 	double	delta_seconds = 0;
 	MSG		msg;
-
+	
 	while (1)
 	{
 		while (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -64,6 +66,10 @@ HRESULT WinMidi::Run(int cmd_show)
 		_Render();
 		delta_seconds = _timer.Stop();
 	}
+
+	_brush->Release();
+	_d2d_render_target->Release();
+	_d2d_factory->Release();
 }
 
 void WinMidi::_Update(double delta_seconds)
@@ -77,23 +83,16 @@ void WinMidi::_Update(double delta_seconds)
 
 void WinMidi::_Render()
 {
-	static ID2D1SolidColorBrush *brush;
-	if (!brush)
-		_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0), &brush);
-
-	if (_d2d_render_target)
-	{
 		_d2d_render_target->BeginDraw();
 		_d2d_render_target->Clear(D2D1::ColorF(0x222222));
 		
-		_note_sheet.Render(_d2d_render_target, brush, _player.GetCurrentTick());
+		_note_sheet.Render(_d2d_render_target, _brush, _player.GetCurrentTick());
 
-		brush->SetColor(D2D1::ColorF(0x888888));
+		_brush->SetColor(D2D1::ColorF(0x888888));
 		_d2d_render_target->DrawLine(D2D1::Point2F((float)_player.GetCurrentTick(), 0), D2D1::Point2F((float)_player.GetCurrentTick(), 255),
-			brush, 2);
+			_brush, 2);
 		
 		_d2d_render_target->EndDraw();
-	}
 }
 
 void WinMidi::_ToggleFullscreen()
@@ -144,7 +143,7 @@ void WinMidi::Command(int id)
 	{
 	case ID_FILE_OPEN:
 	case IDA_OPEN:
-		_file.LoadFromDirectory(_window.GetHandle());
+		_file.LoadWithDialog(_window.GetHandle());
 
 		_note_sheet.Load(_file.GetTracks());
 

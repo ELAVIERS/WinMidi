@@ -11,7 +11,8 @@ public:
 	MidiFile();
 	~MidiFile();
 
-	void LoadFromDirectory(HWND owner);
+	void LoadWithDialog(HWND owner);
+	bool LoadFromFile(const char* File);
 	void DisplayStringToFile(const char* path);
 
 	//Tracks

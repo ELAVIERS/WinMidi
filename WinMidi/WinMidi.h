@@ -21,10 +21,18 @@ public:
 
 	void Command(int id);
 	void Resize(unsigned int width, unsigned int height);
+
+	inline void LoadMIDIFile(const char* File) 
+	{	
+			_file.LoadFromFile(File); 
+			_player.SetFile(&_file); 
+			_note_sheet.Load(_file.GetTracks());
+	};
 protected:
 	//D2d
 	ID2D1Factory*			_d2d_factory;
 	ID2D1HwndRenderTarget*	_d2d_render_target;
+	ID2D1SolidColorBrush*	_brush;
 
 	//Window
 	WindowClass				_window_class;
