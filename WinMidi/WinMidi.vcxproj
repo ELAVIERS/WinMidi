@@ -120,12 +120,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AboutDialog.cpp" />
+    <ClCompile Include="FileDialogManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MidiEvent.cpp" />
     <ClCompile Include="MidiFile.cpp" />
     <ClCompile Include="MidiPlayer.cpp" />
     <ClCompile Include="MidiTrack.cpp" />
-    <ClCompile Include="MidiUtils.cpp" />
     <ClCompile Include="NoteSheet.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -135,12 +135,12 @@
   <ItemGroup>
     <ClInclude Include="AboutDialog.h" />
     <ClInclude Include="Error.h" />
+    <ClInclude Include="FileDialogManager.h" />
     <ClInclude Include="Midi.h" />
     <ClInclude Include="MidiEvent.h" />
     <ClInclude Include="MidiFile.h" />
     <ClInclude Include="MidiPlayer.h" />
     <ClInclude Include="MidiTrack.h" />
-    <ClInclude Include="MidiUtils.h" />
     <ClInclude Include="Note.h" />
     <ClInclude Include="NoteSheet.h" />
     <ClInclude Include="resource.h" />

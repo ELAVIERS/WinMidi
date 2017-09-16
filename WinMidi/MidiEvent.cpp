@@ -1,6 +1,6 @@
 #include "MidiEvent.h"
 
-#include "MidiUtils.h"
+#include "Midi.h"
 #include "MidiFileUtils.h"
 
 MidiEvent* MidiEvent::LoadEvent(const unsigned char* buffer, unsigned int& pos)
@@ -14,7 +14,6 @@ MidiEvent* MidiEvent::LoadEvent(const unsigned char* buffer, unsigned int& pos)
 
 		event->type = META;
 		event->message = buffer[pos++]; //Set event and increment
-		event->LoadData(buffer, pos, 0);
 	}
 	else
 	{
@@ -28,19 +27,23 @@ MidiEvent* MidiEvent::LoadEvent(const unsigned char* buffer, unsigned int& pos)
 		else event->type = MIDI;
 
 		event->message = message; //Set event message
-		event->LoadData(buffer, pos, MidiUtils::GetEventDataLength(event->message));
 	}
 
+	event->LoadData(buffer, pos);
 	return event;
 }
 
-void MidiEvent::LoadData(const unsigned char* buffer, unsigned int& pos, unsigned char length)
+void MidiEvent::LoadData(const unsigned char* buffer, unsigned int& pos)
 {
-	if (length == 0)length = buffer[pos++];
+	int len;
 
-	SetData(&buffer[pos], length);
+	if (type == META)len = buffer[pos++];
+	else {
+		len = _BytesForNonMeta();
+	}
+	SetData(&buffer[pos], len);
 
-	pos += length;
+	pos += len;
 }
 
 void MidiEvent::SetData(const unsigned char* data, unsigned char length)
@@ -65,3 +68,138 @@ DWORD MidiEvent::ToDWORD() const
 
 	return word;
 }
+
+using namespace std;
+
+inline const string ByteToHex(unsigned char byte)
+{
+	char buf[3];
+	sprintf_s(buf, "%X", byte);
+	return (string)buf;
+}
+
+const string MidiEvent::GetMessageName()
+{
+	if (type == META) {
+		using namespace Events::Meta;
+		switch (message)
+		{
+		case Sequence:			return "Sequence Number";
+		case Text:				return "Text";
+		case Copyright:			return "Copyright";
+		case TrackName:			return "Track Name";
+		case InstrumentName:	return "Instrument Name";
+		case Lyric:				return "Lyric";
+		case Marker:			return "Marker";
+		case Cue:				return "Cue Point";
+		case ChannelPrefix:		return "Channel Prefix";
+		case MidiPort:			return "MIDI Port";
+		case TrackEnd:			return "Track End";
+		case Tempo:				return "Set Tempo";
+		case TimeCodeOffset:	return "SMPTE Offset";
+		case TimeSignature:		return "Time Signature";
+		case KeySignature:		return "Key Signature";
+		case SequencerCustom:	return "Sequencer-Specific";
+		}
+	}
+	else if (type == SYSTEM) {
+		using namespace Events::System;
+		switch (message)
+		{
+		case SystemExclusive:	return "System Exclusive";
+		case SongPosition:		return "Song Position Pointer";
+		case SongSelect:		return "Song Select";
+		case TuneRequest:		return "Tune Request";
+		case TimingClock:		return "Timing Clock";
+		case Start:				return "Start";
+		case Continue:			return "Continue";
+		case Stop:				return "Stop";
+		case ActiveSensing:		return "Active Sensing";
+		}
+	}
+	else
+	{
+		using namespace Events::Midi;
+		switch (message & 0xF0)
+		{
+		case NoteOff:			return "Note Off";
+		case NoteOn:			return _data[1] == 0 ? "Note Off" : "Note On";
+		case PolyAftertouch:	return "Polymorphic Aftertouch";
+		case ControlChange:		return "Control Change";
+		case ProgramChange:		return "Program Change";
+		case ChannelAftertouch:	return "Channel Aftertouch";
+		case PitchWheel:		return "Pitch Wheel";
+		}
+	}
+
+	return "Unknown (0x" + ByteToHex(message) + ")";
+}
+
+const string MidiEvent::GetDisplayString()
+{
+	string pre = "";
+	if (delta_ticks != 0)
+		pre = '(' + to_string(delta_ticks) + " Tick" + (delta_ticks == 1 ? "" : "s") + ")\n";
+
+	string str = (string)(type == META ? "Meta" : type == SYSTEM ? "System" : "MIDI") + "\t" + GetMessageName();
+
+	if (type == MIDI)
+	{
+		unsigned char msg = message & 0xF0;
+
+		if (str.length() < 13) str += '\t';//OCD here
+
+		str += "\t\tChannel " + to_string((int)(message & 0x0f));
+
+		using namespace Events::Midi;
+
+		switch (msg)
+		{
+		case NoteOff:
+		case NoteOn:
+		case PolyAftertouch:
+			str += "\tNote " + to_string(_data[0]) + "\t\tVelocity " + to_string(_data[1]);
+			break;
+		case ControlChange:
+			str += "\tController " + to_string(_data[0]) + "\tValue " + to_string(_data[1]);
+			break;
+		case ProgramChange:
+			str += "\tProgram " + to_string(_data[0]);
+			break;
+		case ChannelAftertouch:
+			str += "\tVelocity " + to_string(_data[0]);
+			break;
+		}
+	}
+	else if (type == META)
+	{
+		if (_data_length > 0)
+			str += "\t\t";
+
+		for (unsigned int i = 0; i < _data_length; i++)
+			str += (i == 0 ? "" : " ") + (string)ByteToHex(_data[i]);
+	}
+
+	return pre + str;
+}
+
+unsigned char MidiEvent::_BytesForNonMeta()
+{
+	if (type == SYSTEM) //If system event
+		switch (message)
+		{
+		case Events::System::SongPosition:
+			return 2;
+		case Events::System::SongSelect:
+			return 1;
+		default:
+			return 0;
+		}
+
+	unsigned char instr = message & 0xF0;
+	if (instr == Events::Midi::ProgramChange || instr == Events::Midi::ChannelAftertouch)
+		return 1;
+
+	return 2;
+}
+

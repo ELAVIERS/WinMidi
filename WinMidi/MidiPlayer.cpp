@@ -30,7 +30,7 @@ void MidiPlayer::SetFile(MidiFile* file)
 	_file = file;
 	_file->SetCallback(this, _Callback);
 
-	_ticks_per_crotchet = _file->GetDivision();
+	_ticks_per_crotchet = _file->GetTicksPerCrotchet();
 	_seconds_per_tick = 0.5 / (double)_ticks_per_crotchet; //0.5 spc / tpc = 120bpm
 }
 

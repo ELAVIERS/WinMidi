@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 
+#include <string>
+
 enum EventType
 {
 	MIDI,
@@ -20,14 +22,18 @@ public:
 	unsigned char	message;
 
 	static MidiEvent* LoadEvent(const unsigned char* Buffer, unsigned int& Pos);
-	void LoadData(const unsigned char* Buffer, unsigned int& Pos, unsigned char Length);
+	void LoadData(const unsigned char* Buffer, unsigned int& Pos);
 	void SetData(const unsigned char* Data, unsigned char Length);
 
-	const unsigned char* GetData() const { return _data; };
-	const unsigned char  GetDataLength() const { return _data_length; };
+	const unsigned char*	GetData() const { return _data; };
+	const unsigned char		GetDataLength() const { return _data_length; };
+	const std::string		GetMessageName();
+	const std::string		GetDisplayString();
 
 	DWORD ToDWORD() const;
-protected:
+private:
 	unsigned char*	_data;
 	unsigned char	_data_length;
+
+	unsigned char	_BytesForNonMeta();
 };

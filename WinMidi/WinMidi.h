@@ -22,11 +22,7 @@ public:
 	void Command(int id);
 	void Resize(unsigned int width, unsigned int height);
 
-	inline void LoadMIDIFile(const char* File) 
-	{	
-			_file.LoadFromFile(File); 
-			_note_sheet.Load(_file.GetTracks());
-	};
+	void LoadMIDIFile(const char* File, bool Play = false);
 protected:
 	//D2d
 	ID2D1Factory*			_d2d_factory;
@@ -45,6 +41,9 @@ protected:
 	MidiPlayer				_player;
 	NoteSheet				_note_sheet;
 	unsigned short			_track_count;
+	unsigned int			_line_x;
+
+	signed short			_note_length;
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	void _Update(double DeltaSeconds);
 	void _Render();

@@ -2,7 +2,6 @@
 
 #include "MidiEvent.h"
 #include "MidiFileUtils.h"
-#include "MidiUtils.h"
 
 MidiTrack::MidiTrack() : _ticks(0), _next_event(0)
 {
@@ -52,7 +51,7 @@ const string MidiTrack::GetDisplayString() const
 
 	for (MidiEvent* event : _events)
 	{
-		str += MidiUtils::CreateDisplayString(event) + '\n';
+		str += event->GetDisplayString() + '\n';
 	}
 
 	return str;

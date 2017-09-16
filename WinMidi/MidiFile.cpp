@@ -4,7 +4,6 @@
 #include "MidiFileUtils.h"
 
 #include <fstream>
-#include <shobjidl.h>
 
 MidiFile::MidiFile()
 {
@@ -17,46 +16,6 @@ MidiFile::~MidiFile()
 
 using namespace std;
 using namespace Error;
-
-void MidiFile::LoadWithDialog(HWND owner)
-{
-	IFileOpenDialog* open_dialog;
-	COMDLG_FILTERSPEC filters[] = { { L"MIDI Files", L"*.MID;*.MIDI" },{ L"All Files", L"*.*" } };
-
-	HRESULT result = CoCreateInstance(
-		CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&open_dialog));
-
-	if (SUCCEEDED(result)) {
-		using namespace MidiFileUtils;
-
-		open_dialog->SetFileTypes(2, filters);
-		open_dialog->Show(owner);
-
-		LPWSTR file_name;
-		IShellItem* item;
-
-		result = open_dialog->GetResult(&item);
-		if (!SUCCEEDED(result))
-			return;
-
-		item->GetDisplayName(SIGDN_FILESYSPATH, &file_name);
-
-		size_t len = wcslen(file_name);
-		char* cstr = new char[len + 1];
-		
-		for (int i = 0; i < len; ++i)
-		{
-			cstr[i] = (char)file_name[i];
-		}
-		cstr[len] = 0;
-
-		LoadFromFile(cstr);
-
-		delete[] cstr;
-	}
-	else 
-		ErrorMessage("Could not open file dialog");
-}
 
 bool MidiFile::LoadFromFile(const char* path)
 {

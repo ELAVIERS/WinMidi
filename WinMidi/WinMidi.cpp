@@ -2,10 +2,11 @@
 
 #include "Error.h"
 #include "AboutDialog.h"
+#include "FileDialogManager.h"
 #include "Midi.h"
 #include "resource.h"
 
-WinMidi::WinMidi()
+WinMidi::WinMidi() : _note_length(256)
 {
 }
 
@@ -36,9 +37,20 @@ void WinMidi::Initialise(HINSTANCE instance)
 
 	_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0), &_brush);
 
-	//Other
+	//Misc
+	_note_sheet.SetPixelsPerCrotchet(_note_length);
+}
+
+void WinMidi::LoadMIDIFile(const char* file, bool play)
+{
+	_file.LoadFromFile(file);
+	_note_sheet.Load(_file.GetTracks());
+	_note_sheet.SetTicksPerCrotchet(_file.GetTicksPerCrotchet());
 	_player.SetFile(&_file);
-	_note_sheet.Resize(_window_size);
+	_player.Stop();
+
+	if(play)
+		_player.Play();
 }
 
 HRESULT WinMidi::Run(int cmd_show)
@@ -78,7 +90,7 @@ void WinMidi::_Update(double delta_seconds)
 	_player.Update(delta_seconds);
 
 	static char s[32];
-	snprintf(s, 32, "Tick %u", _player.GetCurrentTick());
+	snprintf(s, 32, "Tick %u, Note Length:%d", _player.GetCurrentTick(), _note_length);
 	::SetWindowText(_window.GetHandle(), s);
 }
 
@@ -87,11 +99,13 @@ void WinMidi::_Render()
 		_d2d_render_target->BeginDraw();
 		_d2d_render_target->Clear(D2D1::ColorF(0x222222));
 		
+		//Draw Notes and reset transform
 		_note_sheet.Render(_d2d_render_target, _brush, _player.GetCurrentTick());
+		_d2d_render_target->SetTransform(D2D1::Matrix3x2F::Identity());
 
+		//Draw UI
 		_brush->SetColor(D2D1::ColorF(0x888888));
-		_d2d_render_target->DrawLine(D2D1::Point2F((float)_player.GetCurrentTick(), 0), D2D1::Point2F((float)_player.GetCurrentTick(), 255),
-			_brush, 2);
+		_d2d_render_target->DrawLine(D2D1::Point2F((float)_line_x, 0), D2D1::Point2F((float)_line_x, (float)_window_size.height), _brush, 1.f);
 		
 		_d2d_render_target->EndDraw();
 }
@@ -144,13 +158,12 @@ void WinMidi::Command(int id)
 	{
 	case ID_FILE_OPEN:
 	case IDA_OPEN:
-		_file.LoadWithDialog(_window.GetHandle());
-
-		_note_sheet.Load(_file.GetTracks());
-
-		_player.SetFile(&_file);
-		_player.Stop();
+	{
+		std::string file_path;
+		if (FileDialogManager::OpenFile(file_path))
+			LoadMIDIFile(file_path.c_str());
 		break;
+	}
 
 	case ID_FILE_PLAY:
 	case IDA_PLAY:
@@ -174,6 +187,19 @@ void WinMidi::Command(int id)
 	case ID_HELP_ABOUT:
 		AboutDialog::Open(NULL, _window.GetHandle());
 		break;
+		//
+	case IDA_QUIT:
+		PostQuitMessage(0);
+		break;
+	case IDA_NOTEPLUS:
+		_note_length += 8;
+		_note_sheet.SetPixelsPerCrotchet(_note_length);
+		break;
+	case IDA_NOTEMINUS:
+		_note_length -= 8;
+		_note_sheet.SetPixelsPerCrotchet(_note_length);
+		break;
+
 	}
 }
 
@@ -181,6 +207,8 @@ void WinMidi::Resize(unsigned int width, unsigned int height)
 {
 	_window_size = D2D1::SizeU(width, height);
 	_note_sheet.Resize(_window_size);
+
+	_line_x = width / 2;
 
 	if (_d2d_render_target) {
 		_d2d_render_target->Resize(_window_size);

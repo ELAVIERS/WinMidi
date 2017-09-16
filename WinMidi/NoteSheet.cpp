@@ -94,38 +94,32 @@ void NoteSheet::_BakeRects()
 	}
 }
 
-const float _scale = .5f;
-
 void NoteSheet::Render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrush* brush, unsigned int tick)
 {
 	static D2D1_COLOR_F color;
 
 	render_target->SetTransform(
-		D2D1::Matrix3x2F::Translation((float)(_x_offset - (signed int)tick), (float)(_max_pitch - 254))
-		*	D2D1::Matrix3x2F::Scale(_scale, (float)_size.height / (float)(_max_pitch - _min_pitch + 1), D2D1::Point2F(_size.width / 2.f,0))
+		D2D1::Matrix3x2F::Translation	((float)(_x_offset - (signed int)tick), (float)(_max_pitch - 254))
+		*	_scale_mat
 		);
-
-	int				left_bound =	tick - (int)(_x_offset / _scale);
-	unsigned int	right_bound =	tick + (unsigned int)((_size.width - _x_offset) / _scale);
-
-	if (left_bound < 0)left_bound = 0;
 
 	for (int trackid = 0; trackid < _track_count; trackid++)
 	{
 		static size_t size;
 		size = _notes[trackid].size();
 
+		brush->SetColor(TRACK_COLOURS[trackid % TRACK_COLOUR_COUNT]);
+
 		for (unsigned int i = 0; i < size; ++i)
 		{
-			if (_notes[trackid][i].end < (unsigned int)left_bound || _notes[trackid][i].start > right_bound)
-				continue;
-
 			if (tick >= _notes[trackid][i].start && tick <= _notes[trackid][i].end)
+			{
 				brush->SetColor(ScaleColour(TRACK_COLOURS[trackid % TRACK_COLOUR_COUNT], .75f));
-			else
+				render_target->FillRectangle(_rects[trackid][i], brush);
 				brush->SetColor(TRACK_COLOURS[trackid % TRACK_COLOUR_COUNT]);
-
-			render_target->FillRectangle(_rects[trackid][i], brush);
+			}
+			else
+				render_target->FillRectangle(_rects[trackid][i], brush);
 		}
 	}
 }
@@ -135,4 +129,12 @@ void NoteSheet::Resize(const D2D1_SIZE_U& size)
 	_size = size;
 
 	_x_offset = _size.width / 2;
+
+	_UpdateScaleMatrix();
+}
+
+void NoteSheet::_UpdateScaleMatrix()
+{
+	_scale_mat = D2D1::Matrix3x2F::Scale(1.f / ((float)_ticks_per_crotchet / (float)_pixels_per_crotchet), 
+		(float)_size.height / (float)(_max_pitch - _min_pitch + 1), D2D1::Point2F(_size.width / 2.f, 0));
 }

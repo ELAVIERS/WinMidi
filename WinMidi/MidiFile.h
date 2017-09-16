@@ -23,7 +23,7 @@ public:
 	//Getters
 	inline unsigned short GetFormat() const					{ return _format; };
 	inline const std::vector<MidiTrack*>& GetTracks() const { return _tracks; };
-	inline unsigned short GetDivision() const				{ return _ticks_per_crotchet; };
+	inline unsigned short GetTicksPerCrotchet() const				{ return _ticks_per_crotchet; };
 
 	const std::string GetDisplayString() const;
 protected:
