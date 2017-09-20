@@ -43,11 +43,11 @@ void WinMidi::Initialise(HINSTANCE instance)
 
 void WinMidi::LoadMIDIFile(const char* file, bool play)
 {
+	_tempo_multiplier = 1.f;
 	_file.LoadFromFile(file);
 	_note_sheet.Load(_file.GetTracks());
 	_note_sheet.SetTicksPerCrotchet(_file.GetTicksPerCrotchet());
 	_player.SetFile(&_file);
-	_player.Stop();
 
 	if(play)
 		_player.Play();
@@ -57,15 +57,14 @@ HRESULT WinMidi::Run(int cmd_show)
 {
 	_window.Show(cmd_show);
 	
-	double	delta_seconds = 0;
 	MSG		msg;
 	
 	while (1)
 	{
-		while (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			if (msg.message == WM_QUIT)
-				return (HRESULT)msg.wParam;
+				break;
 
 			if (!::TranslateAccelerator(_window.GetHandle(), _accelerators, &msg))
 			{
@@ -73,24 +72,31 @@ HRESULT WinMidi::Run(int cmd_show)
 				::DispatchMessage(&msg);
 			}
 		}
-
-		_timer.Start();
-		_Update(delta_seconds);
-		_Render();
-		delta_seconds = _timer.Stop();
+		else _Frame();
 	}
 
 	_brush->Release();
 	_d2d_render_target->Release();
 	_d2d_factory->Release();
+
+	return (HRESULT)msg.wParam;
+}
+
+void WinMidi::_Frame()
+{
+	static double delta_seconds = 0.0;
+	_timer.Start();
+	_Update(delta_seconds);
+	_Render();
+	delta_seconds = _timer.Stop();
 }
 
 void WinMidi::_Update(double delta_seconds)
 {
-	_player.Update(delta_seconds);
+	_player.Update(delta_seconds * _tempo_multiplier);
 
-	static char s[32];
-	snprintf(s, 32, "Tick %u, Note Length:%d", _player.GetCurrentTick(), _note_length);
+	static char s[64];
+	snprintf(s, 64, "Tick %u, Note Length:%d, Speed Multiplier:%.2f", _player.GetCurrentTick(), _note_length, _tempo_multiplier);
 	::SetWindowText(_window.GetHandle(), s);
 }
 
@@ -199,7 +205,19 @@ void WinMidi::Command(int id)
 		_note_length -= 8;
 		_note_sheet.SetPixelsPerCrotchet(_note_length);
 		break;
-
+	case IDA_TEMPOPLUS:
+		_tempo_multiplier += 0.25f;
+		break;
+	case IDA_TEMPOMINUS:
+		_tempo_multiplier -= 0.25f;
+		if (_tempo_multiplier < 0.f) _player.ResetNotes();
+		break;
+	case IDA_SKIPFWD:
+		_player.Seek(5.0);
+		break;
+	case IDA_SKIPBACK:
+		_player.Seek(-5.0);
+		break;
 	}
 }
 

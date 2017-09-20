@@ -11,11 +11,14 @@ public:
 	~MidiPlayer();
 
 	inline void Play()	{ _playing = true; };
-	inline void Pause() { _playing = false; ::midiOutReset(_midi_out); };
+	inline void Pause() { _playing = false; ResetNotes(); };
 	inline void Toggle() { if (_playing)Pause(); else Play(); };
 	void Stop();
 
+	inline void ResetNotes() { midiOutReset(_midi_out); };
+
 	void Update(double DeltaSeconds);
+	void Seek(double Seconds);
 
 	void SetFile(MidiFile* File);
 
@@ -30,9 +33,11 @@ protected:
 	double			_seconds_per_tick;
 
 	HMIDIOUT		_midi_out;
+
+	double			_elapsed_time;
 	////////////////File
 	MidiFile*		_file;
 
-	int				_ticks_per_crotchet;
+	unsigned short	_ticks_per_crotchet;
 };
 

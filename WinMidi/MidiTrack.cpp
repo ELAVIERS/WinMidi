@@ -1,9 +1,10 @@
 #include "MidiTrack.h"
 
+#include "Midi.h"
 #include "MidiEvent.h"
 #include "MidiFileUtils.h"
 
-MidiTrack::MidiTrack() : _ticks(0), _next_event(0)
+MidiTrack::MidiTrack() : _ticks(0), _event_index(0)
 {
 }
 
@@ -16,18 +17,30 @@ MidiTrack::~MidiTrack()
 	_events.clear();
 }
 
-void MidiTrack::Update(unsigned int delta_ticks)
+void MidiTrack::Update(signed int delta_ticks, bool silent)
 {
 	_ticks += delta_ticks;
 
-	if (_next_event < _events.size() && _ticks >= _events[_next_event]->delta_ticks)
+	if (_ticks < 0)
 	{
-		_ticks -= _events[_next_event]->delta_ticks;
+		while (_event_index > 0 && -1 * _ticks > _events[_event_index]->delta_ticks)
+		{
+			_ticks += _events[_event_index]->delta_ticks;
 
-		if (_callback)
-			_callback(_callback_owner, _events[_next_event]);
+			--_event_index;
+		}
+	}
+	else
+	{
+		while (_event_index + 1 < _events.size() && _ticks >= _events[_event_index + 1]->delta_ticks)
+		{
+			_event_index++;
 
-		_next_event++;
+			_ticks -= _events[_event_index]->delta_ticks;
+
+			if (_callback && (!silent || _events[_event_index]->GetMessageUpper() != Events::Midi::NoteOn))
+				_callback(_callback_owner, _events[_event_index]);
+		}
 	}
 }
 

@@ -44,7 +44,9 @@ protected:
 	unsigned int			_line_x;
 
 	signed short			_note_length;
+	float					_tempo_multiplier;
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	void _Frame();
 	void _Update(double DeltaSeconds);
 	void _Render();
 	void _ToggleFullscreen();

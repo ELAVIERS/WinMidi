@@ -95,20 +95,20 @@ const string MidiFile::GetDisplayString() const
 
 void MidiFile::ResetTracks()
 {
-	for (MidiTrack* track : _tracks)
-		track->Reset();
+	for (auto track = _tracks.begin(); track != _tracks.end(); ++track)
+		(*track)->Reset();
 }
 
-void MidiFile::Update(unsigned int delta_ticks)
+void MidiFile::Update(signed int delta_ticks, bool silent)
 {
-	for (MidiTrack* track : _tracks)
-		track->Update(delta_ticks);
+	for (auto track = _tracks.begin(); track != _tracks.end(); ++track)
+		(*track)->Update(delta_ticks, silent);
 }
 
 void MidiFile::SetCallback(void* owner, void(*callback)(void*, const MidiEvent*))
 {
-	for (MidiTrack* track : _tracks)
-		track->SetCallback(owner, callback);
+	for (auto track = _tracks.begin(); track != _tracks.end(); ++track)
+		(*track)->SetCallback(owner, callback);
 }
 
 void MidiFile::DisplayStringToFile(const char* path)

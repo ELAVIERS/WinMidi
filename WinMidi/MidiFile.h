@@ -11,13 +11,12 @@ public:
 	MidiFile();
 	~MidiFile();
 
-	void LoadWithDialog(HWND owner);
 	bool LoadFromFile(const char* File);
 	void DisplayStringToFile(const char* path);
 
 	//Tracks
 	void ResetTracks();
-	void Update(unsigned int DeltaTicks);
+	void Update(signed int DeltaTicks, bool Silent);
 	void SetCallback(void* Owner, void(*Callback)(void*, const MidiEvent*));
 
 	//Getters

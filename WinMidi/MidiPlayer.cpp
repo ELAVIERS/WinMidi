@@ -22,6 +22,7 @@ void MidiPlayer::Stop()
 {
 	Pause();
 	_tick = 0;
+	_elapsed_time = 0.0;
 	_file->ResetTracks();
 }
 
@@ -29,6 +30,7 @@ void MidiPlayer::SetFile(MidiFile* file)
 {
 	_file = file;
 	_file->SetCallback(this, _Callback);
+	Stop();
 
 	_ticks_per_crotchet = _file->GetTicksPerCrotchet();
 	_seconds_per_tick = 0.5 / (double)_ticks_per_crotchet; //0.5 spc / tpc = 120bpm
@@ -36,22 +38,29 @@ void MidiPlayer::SetFile(MidiFile* file)
 
 void MidiPlayer::Update(double delta_seconds)
 {
-	if (!_playing)
+	if (!_playing || !_file)
 		return;
 
-	static double	elapsed_time = 0.0;
-	static int		ticks = 0;
+	_elapsed_time += delta_seconds;
 
-	elapsed_time += delta_seconds;
-
-	if (elapsed_time >= _seconds_per_tick)
+	if (abs(_elapsed_time) >= _seconds_per_tick)
 	{
-		ticks = (int)(elapsed_time / _seconds_per_tick);
-		_file->Update(ticks);
+		static signed int	ticks;
+		ticks = (signed int)(_elapsed_time / _seconds_per_tick);
+		_file->Update(ticks, false);
 		_tick += ticks;
 
-		elapsed_time -= _seconds_per_tick * ticks;
+		_elapsed_time -= _seconds_per_tick * ticks;
 	}
+}
+
+void MidiPlayer::Seek(double seconds)
+{
+	ResetNotes();
+
+	signed int ticks = (signed int)(seconds / _seconds_per_tick);
+	_file->Update(ticks, true);
+	_tick += ticks;
 }
 
 void MidiPlayer::_Callback(void* owner, const MidiEvent* event)

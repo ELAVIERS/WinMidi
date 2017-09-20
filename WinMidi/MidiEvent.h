@@ -16,10 +16,12 @@ public:
 	MidiEvent() {};
 	~MidiEvent() { if (_data) delete[] _data; };
 
-	EventType		type;
+	EventType				type;
 
-	unsigned int	delta_ticks;
-	unsigned char	message;
+	unsigned int			delta_ticks;
+	unsigned char			message;
+
+	inline unsigned char	GetMessageUpper() { return message & 0xF0; }
 
 	static MidiEvent* LoadEvent(const unsigned char* Buffer, unsigned int& Pos);
 	void LoadData(const unsigned char* Buffer, unsigned int& Pos);

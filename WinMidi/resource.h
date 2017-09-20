@@ -9,6 +9,10 @@
 #define IDA_QUIT                        4008
 #define IDA_NOTEPLUS                    4009
 #define IDA_NOTEMINUS                   4010
+#define IDA_TEMPOPLUS                   4012
+#define IDA_TEMPOMINUS                  4013
+#define IDA_SKIPFWD                     4015
+#define IDA_SKIPBACK                    4016
 #define ID_FILE_OPEN                    40001
 #define ID_FILE_SAVE                    40002
 #define ID_VIEW_FULLSCREEN              40003
@@ -26,7 +30,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        104
-#define _APS_NEXT_COMMAND_VALUE         4012
+#define _APS_NEXT_COMMAND_VALUE         4008
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

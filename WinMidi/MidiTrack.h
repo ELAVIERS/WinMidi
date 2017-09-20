@@ -10,8 +10,8 @@ public:
 	~MidiTrack();
 
 	void LoadFromBuffer(const unsigned char* buffer, unsigned int& pos);
-	void Update(unsigned int DeltaTicks);
-	inline void Reset() { _ticks = _next_event = 0; }
+	void Update(signed int DeltaTicks, bool Silent);
+	inline void Reset() { _ticks = _event_index = 0; }
 
 	inline const std::vector<MidiEvent*>& getEvents() const { return _events; };
 	const std::string GetDisplayString() const;
@@ -23,8 +23,8 @@ protected:
 	unsigned int			_length;
 
 	////Event handling
-	unsigned int			_ticks;			//The amount of ticks elapsed
-	unsigned int			_next_event;	//Index to the next event to be played
+	signed int				_ticks;			//The amount of ticks elapsed
+	unsigned int			_event_index;	//Index to the next event to be played
 
 	void*					_callback_owner;
 	void (*_callback)(void*, const MidiEvent*);
