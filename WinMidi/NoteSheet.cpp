@@ -99,8 +99,8 @@ void NoteSheet::Render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrus
 	static D2D1_COLOR_F color;
 
 	render_target->SetTransform(
-		D2D1::Matrix3x2F::Translation	((float)(_x_offset - (signed int)tick), (float)(_max_pitch - 254))
-		*	_scale_mat
+		D2D1::Matrix3x2F::Translation(-1.f * (float)tick, 0)
+		* _view_matrix
 		);
 
 	for (int trackid = 0; trackid < _track_count; trackid++)
@@ -128,13 +128,28 @@ void NoteSheet::Resize(const D2D1_SIZE_U& size)
 {
 	_size = size;
 
-	_x_offset = _size.width / 2;
+	_tick_offset = (_flip_axes ? _size.height : _size.width) / 2;
 
-	_UpdateScaleMatrix();
+	_UpdateViewMatrix();
 }
 
-void NoteSheet::_UpdateScaleMatrix()
+void NoteSheet::_UpdateViewMatrix()
 {
-	_scale_mat = D2D1::Matrix3x2F::Scale(1.f / ((float)_ticks_per_crotchet / (float)_pixels_per_crotchet), 
-		(float)_size.height / (float)(_max_pitch - _min_pitch + 1), D2D1::Point2F(_size.width / 2.f, 0));
+	if (_flip_axes)
+	{
+		_view_matrix =
+			D2D1::Matrix3x2F::Translation(-1.f * _size.height, (float)(_max_pitch - 254))
+			* D2D1::Matrix3x2F::Rotation(-90)
+			* D2D1::Matrix3x2F::Scale((float)_size.width / (float)(_max_pitch - _min_pitch + 1), 1.f / ((float)_ticks_per_crotchet / (float)_pixels_per_crotchet),
+				D2D1::Point2F(0.f, _size.height))
+			* D2D1::Matrix3x2F::Scale(-1.f,1.f, D2D1::Point2F(_size.width / 2.f, 0));
+	}
+	else
+	{
+		_view_matrix = D2D1::Matrix3x2F::Translation((float)_tick_offset, (float)(_max_pitch - 254))
+			 * D2D1::Matrix3x2F::Scale(
+				1.f / ((float)_ticks_per_crotchet / (float)_pixels_per_crotchet), (float)_size.height / (float)(_max_pitch - _min_pitch + 1), 
+				D2D1::Point2F(_size.width / 2.f, 0.f)
+		);
+	}
 }

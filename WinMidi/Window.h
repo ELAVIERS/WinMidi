@@ -11,6 +11,7 @@ public:
 	void Show(int CmdShow);
 
 	inline HWND GetHandle() { return _hwnd; };
+	inline HMENU GetMenu() { return ::GetMenu(_hwnd); };
 private:
 	HWND	_hwnd;
 };

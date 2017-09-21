@@ -45,6 +45,7 @@ protected:
 
 	signed short			_note_length;
 	float					_tempo_multiplier;
+	bool					_flip_axes;
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	void _Frame();
 	void _Update(double DeltaSeconds);

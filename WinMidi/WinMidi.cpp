@@ -111,7 +111,8 @@ void WinMidi::_Render()
 
 		//Draw UI
 		_brush->SetColor(D2D1::ColorF(0x888888));
-		_d2d_render_target->DrawLine(D2D1::Point2F((float)_line_x, 0), D2D1::Point2F((float)_line_x, (float)_window_size.height), _brush, 1.f);
+		if (!_flip_axes)
+			_d2d_render_target->DrawLine(D2D1::Point2F((float)_line_x, 0), D2D1::Point2F((float)_line_x, (float)_window_size.height), _brush, 1.f);
 		
 		_d2d_render_target->EndDraw();
 }
@@ -186,6 +187,14 @@ void WinMidi::Command(int id)
 		_ToggleFullscreen();
 		break;
 
+	case ID_VIEW_VERTICAL:
+	case IDA_VERTICAL:
+		_flip_axes = !_flip_axes;
+		_note_sheet.SetFlipAxes(_flip_axes);
+		_note_sheet.Resize(_window_size);
+		
+		::ModifyMenu(_window.GetMenu(), ID_VIEW_VERTICAL, MF_BYCOMMAND | (_flip_axes ? MF_CHECKED : MF_UNCHECKED), ID_VIEW_VERTICAL, "&Vertical\tF10");
+		break;
 	case ID_TOOLS_DUMP:
 		_file.DisplayStringToFile("out.txt");
 		::ShellExecute(NULL, "open", "out.txt", NULL, NULL, SW_SHOWMAXIMIZED);
