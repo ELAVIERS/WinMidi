@@ -24,7 +24,7 @@ void WindowClass::Initialise(LPCTSTR class_name, HINSTANCE instance, LPCTSTR men
 		0,												//Extra window bytes
 		instance,										//HINSTANCE containing WNDPROC
 		::LoadIcon(instance, MAKEINTRESOURCE(IDI_ICON)),//Icon handle
-		::LoadCursor(NULL, IDC_ARROW),					//Cursor handle
+		NULL,											//Cursor handle
 		(HBRUSH)(COLOR_WINDOW + 1),						//Background brush
 		menu,											//Menu name
 		class_name,										//Class name

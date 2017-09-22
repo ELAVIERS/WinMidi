@@ -128,8 +128,6 @@ void NoteSheet::Resize(const D2D1_SIZE_U& size)
 {
 	_size = size;
 
-	_tick_offset = (_flip_axes ? _size.height : _size.width) / 2;
-
 	_UpdateViewMatrix();
 }
 
@@ -139,17 +137,18 @@ void NoteSheet::_UpdateViewMatrix()
 	{
 		_view_matrix =
 			D2D1::Matrix3x2F::Translation(-1.f * _size.height, (float)(_max_pitch - 254))
-			* D2D1::Matrix3x2F::Rotation(-90)
+			* D2D1::Matrix3x2F::Rotation(-90.f)
+			* D2D1::Matrix3x2F::Translation(0.f, -1.f * (float)(_size.height - _tick_offset))
 			* D2D1::Matrix3x2F::Scale((float)_size.width / (float)(_max_pitch - _min_pitch + 1), 1.f / ((float)_ticks_per_crotchet / (float)_pixels_per_crotchet),
-				D2D1::Point2F(0.f, _size.height))
-			* D2D1::Matrix3x2F::Scale(-1.f,1.f, D2D1::Point2F(_size.width / 2.f, 0));
+				D2D1::Point2F(0.f, (float)(_tick_offset)))
+			* D2D1::Matrix3x2F::Scale(-1.f,1.f, D2D1::Point2F(_size.width / 2.f, 0.f));
 	}
 	else
 	{
 		_view_matrix = D2D1::Matrix3x2F::Translation((float)_tick_offset, (float)(_max_pitch - 254))
 			 * D2D1::Matrix3x2F::Scale(
 				1.f / ((float)_ticks_per_crotchet / (float)_pixels_per_crotchet), (float)_size.height / (float)(_max_pitch - _min_pitch + 1), 
-				D2D1::Point2F(_size.width / 2.f, 0.f)
+				D2D1::Point2F((float)_tick_offset, 0.f)
 		);
 	}
 }

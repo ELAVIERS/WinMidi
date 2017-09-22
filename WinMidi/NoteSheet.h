@@ -18,9 +18,9 @@ public:
 
 	inline void SetTicksPerCrotchet(unsigned short TicksPerCrotchet) { _ticks_per_crotchet = TicksPerCrotchet; _UpdateViewMatrix(); };
 	inline void SetPixelsPerCrotchet(signed short PixelsPerCrotchet) { _pixels_per_crotchet = PixelsPerCrotchet; _UpdateViewMatrix(); };
+	inline void SetTickOffset(unsigned int TickOffset) { _tick_offset = TickOffset; _UpdateViewMatrix(); };
 
-	inline unsigned char	getMaximumPitch() { return _max_pitch; };
-	inline unsigned char	getMinimumPitch() { return _min_pitch; };
+	inline signed short		GetPixelsPerCrotchet() { return _pixels_per_crotchet; };
 	inline void				SetFlipAxes(bool FlipAxes) { _flip_axes = FlipAxes; };
 protected:
 	std::vector<Note>*			_notes;
@@ -29,7 +29,6 @@ protected:
 
 	unsigned char				_max_pitch;
 	unsigned char				_min_pitch;
-	int							_tick_offset;
 
 	D2D1_MATRIX_3X2_F			_view_matrix;
 
@@ -37,6 +36,7 @@ protected:
 
 	unsigned short				_ticks_per_crotchet;
 	signed short				_pixels_per_crotchet;
+	unsigned int				_tick_offset;
 
 	bool						_flip_axes;
 

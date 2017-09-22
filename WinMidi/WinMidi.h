@@ -5,6 +5,7 @@
 #include "NoteSheet.h"
 #include "MidiFile.h"
 #include "MidiPlayer.h"
+#include "RectU.h"
 #include "Timer.h"
 #include "Window.h"
 #include "WindowClass.h"
@@ -23,6 +24,10 @@ public:
 	void Resize(unsigned int width, unsigned int height);
 
 	void LoadMIDIFile(const char* File, bool Play = false);
+
+	void MouseMove(short x, short y);
+	void MouseDown();
+	void MouseUp();
 protected:
 	//D2d
 	ID2D1Factory*			_d2d_factory;
@@ -40,13 +45,23 @@ protected:
 	MidiFile				_file;
 	MidiPlayer				_player;
 	NoteSheet				_note_sheet;
-	unsigned short			_track_count;
-	unsigned int			_line_x;
 
-	signed short			_note_length;
+	float					_run_time;
+	POINT					_cursor_pos;
+
+	float					_tick_percentage;
+	unsigned short			_tick_offset;
+
 	float					_tempo_multiplier;
 	bool					_flip_axes;
+
+	//Click Regions
+	RectU					_region_tick_offset;
+	bool					_region_tick_offset_overlap;
+	bool					_region_tick_offset_hold;
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	void _CalculateTickOffset();
 	void _Frame();
 	void _Update(double DeltaSeconds);
 	void _Render();

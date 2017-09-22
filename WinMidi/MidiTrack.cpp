@@ -23,7 +23,7 @@ void MidiTrack::Update(signed int delta_ticks, bool silent)
 
 	if (_ticks < 0)
 	{
-		while (_event_index > 0 && -1 * _ticks > _events[_event_index]->delta_ticks)
+		while (_event_index > 0 && (unsigned int)(-1 * _ticks) > _events[_event_index]->delta_ticks)
 		{
 			_ticks += _events[_event_index]->delta_ticks;
 
@@ -32,7 +32,7 @@ void MidiTrack::Update(signed int delta_ticks, bool silent)
 	}
 	else
 	{
-		while (_event_index + 1 < _events.size() && _ticks >= _events[_event_index + 1]->delta_ticks)
+		while (_event_index + 1 < _events.size() && (unsigned int)_ticks >= _events[_event_index + 1]->delta_ticks)
 		{
 			_event_index++;
 

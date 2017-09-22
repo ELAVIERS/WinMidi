@@ -6,7 +6,9 @@
 #include "Midi.h"
 #include "resource.h"
 
-WinMidi::WinMidi() : _note_length(256)
+#include <windowsx.h>
+
+WinMidi::WinMidi()
 {
 }
 
@@ -15,8 +17,12 @@ WinMidi::~WinMidi()
 {
 }
 
+HCURSOR arrow	= ::LoadCursor(NULL, IDC_ARROW);
+HCURSOR grabber = ::LoadCursor(NULL, IDC_HAND);
+
 void WinMidi::Initialise(HINSTANCE instance)
 {
+	::SetCursor(arrow);
 	//Create window
 	_window_class.Initialise("WinMidi_Window", instance, MAKEINTRESOURCE(IDR_MENU), _WindowProcedure);
 	_window.Initialise("WinMidi_Window", instance, "WinMidi", this);
@@ -38,7 +44,9 @@ void WinMidi::Initialise(HINSTANCE instance)
 	_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0), &_brush);
 
 	//Misc
-	_note_sheet.SetPixelsPerCrotchet(_note_length);
+	_tick_percentage = 0.5f;
+	_CalculateTickOffset();
+	_note_sheet.SetPixelsPerCrotchet(256);
 }
 
 void WinMidi::LoadMIDIFile(const char* file, bool play)
@@ -89,6 +97,7 @@ void WinMidi::_Frame()
 	_Update(delta_seconds);
 	_Render();
 	delta_seconds = _timer.Stop();
+	_run_time += (float)delta_seconds;
 }
 
 void WinMidi::_Update(double delta_seconds)
@@ -96,7 +105,7 @@ void WinMidi::_Update(double delta_seconds)
 	_player.Update(delta_seconds * _tempo_multiplier);
 
 	static char s[64];
-	snprintf(s, 64, "Tick %u, Note Length:%d, Speed Multiplier:%.2f", _player.GetCurrentTick(), _note_length, _tempo_multiplier);
+	snprintf(s, 64, "Tick %u, Note Length:%d, Speed Multiplier:%.2f %d %d", _player.GetCurrentTick(), _note_sheet.GetPixelsPerCrotchet(), _tempo_multiplier, _cursor_pos.x, _cursor_pos.y);
 	::SetWindowText(_window.GetHandle(), s);
 }
 
@@ -110,19 +119,42 @@ void WinMidi::_Render()
 		_d2d_render_target->SetTransform(D2D1::Matrix3x2F::Identity());
 
 		//Draw UI
-		_brush->SetColor(D2D1::ColorF(0x888888));
+		_brush->SetColor(D2D1::ColorF(0xFFFFFF));
 		if (!_flip_axes)
-			_d2d_render_target->DrawLine(D2D1::Point2F((float)_line_x, 0), D2D1::Point2F((float)_line_x, (float)_window_size.height), _brush, 1.f);
-		
+			_d2d_render_target->DrawLine(D2D1::Point2F((float)_tick_offset, 0), D2D1::Point2F((float)_tick_offset, (float)_window_size.height), _brush, .25f);
+		else
+			_d2d_render_target->DrawLine(D2D1::Point2F(0, (float)(_tick_offset)), 
+				 D2D1::Point2F((float)_window_size.width, (float)(_tick_offset)), _brush, .25f);
+
 		_d2d_render_target->EndDraw();
+}
+
+void WinMidi::_CalculateTickOffset()
+{
+	unsigned short AreaWidth = 8;
+
+	if (_flip_axes)
+	{
+		_tick_offset = (short)(_window_size.height * _tick_percentage);
+		_region_tick_offset.Set(0, _tick_offset > AreaWidth ? _tick_offset - AreaWidth : 0,
+								_window_size.width, _tick_offset + AreaWidth);
+	}
+	else
+	{
+		_tick_offset = (short)(_window_size.width  * _tick_percentage);
+		_region_tick_offset.Set(_tick_offset > AreaWidth ? _tick_offset - AreaWidth : 0, 0, 
+			_tick_offset + AreaWidth, _window_size.height);
+	}
+
+	_note_sheet.SetTickOffset(_tick_offset);
 }
 
 void WinMidi::_ToggleFullscreen()
 {
-	static bool fullscreen = false;
-	static RECT winSize;
-	static bool maximised;
-	static HMENU menu;
+	static bool		fullscreen = false;
+	static bool		maximised;
+	static RECT		winSize;
+	static HMENU	menu;
 
 	HWND hwnd = _window.GetHandle();
 
@@ -139,7 +171,7 @@ void WinMidi::_ToggleFullscreen()
 
 		::GetWindowRect(hwnd, &winSize);
 
-		menu = ::GetMenu(hwnd);
+		menu = _window.GetMenu();
 		::SetMenu(hwnd, NULL);
 
 		::SetWindowLong(hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
@@ -190,29 +222,29 @@ void WinMidi::Command(int id)
 	case ID_VIEW_VERTICAL:
 	case IDA_VERTICAL:
 		_flip_axes = !_flip_axes;
+		_CalculateTickOffset();
+
 		_note_sheet.SetFlipAxes(_flip_axes);
 		_note_sheet.Resize(_window_size);
 		
 		::ModifyMenu(_window.GetMenu(), ID_VIEW_VERTICAL, MF_BYCOMMAND | (_flip_axes ? MF_CHECKED : MF_UNCHECKED), ID_VIEW_VERTICAL, "&Vertical\tF10");
 		break;
 	case ID_TOOLS_DUMP:
-		_file.DisplayStringToFile("out.txt");
-		::ShellExecute(NULL, "open", "out.txt", NULL, NULL, SW_SHOWMAXIMIZED);
+		_file.DisplayStringToFile("events.txt");
+		::ShellExecute(NULL, "open", "events.txt", NULL, NULL, SW_SHOWMAXIMIZED);
 		break;
 	case ID_HELP_ABOUT:
 		AboutDialog::Open(NULL, _window.GetHandle());
 		break;
-		//
+		
 	case IDA_QUIT:
 		PostQuitMessage(0);
 		break;
 	case IDA_NOTEPLUS:
-		_note_length += 8;
-		_note_sheet.SetPixelsPerCrotchet(_note_length);
+		_note_sheet.SetPixelsPerCrotchet(_note_sheet.GetPixelsPerCrotchet() + 8);
 		break;
 	case IDA_NOTEMINUS:
-		_note_length -= 8;
-		_note_sheet.SetPixelsPerCrotchet(_note_length);
+		_note_sheet.SetPixelsPerCrotchet(_note_sheet.GetPixelsPerCrotchet() - 8);
 		break;
 	case IDA_TEMPOPLUS:
 		_tempo_multiplier += 0.25f;
@@ -233,9 +265,9 @@ void WinMidi::Command(int id)
 void WinMidi::Resize(unsigned int width, unsigned int height)
 {
 	_window_size = D2D1::SizeU(width, height);
-	_note_sheet.Resize(_window_size);
+	_CalculateTickOffset();
 
-	_line_x = width / 2;
+	_note_sheet.Resize(_window_size);
 
 	if (_d2d_render_target) {
 		_d2d_render_target->Resize(_window_size);
@@ -243,7 +275,53 @@ void WinMidi::Resize(unsigned int width, unsigned int height)
 	}
 }
 
+void WinMidi::MouseMove(short x, short y)
+{
+	_cursor_pos = { x, y };
+
+	//If Cursor is over region change it
+	if (_region_tick_offset.Overlaps((short)_cursor_pos.x, (short)_cursor_pos.y))
+	{
+		_region_tick_offset_overlap = true;
+		::SetCursor(grabber);
+	}
+	else
+	{
+		_region_tick_offset_overlap = false;
+		::SetCursor(arrow);
+	}
+
+	if (_region_tick_offset_hold)
+	{
+		if (_flip_axes)
+			_tick_percentage = (float)_cursor_pos.y / (float)_window_size.height;
+		else
+			_tick_percentage = (float)_cursor_pos.x / (float)_window_size.width;
+
+		if (_tick_percentage > .49f && _tick_percentage < .51f)
+			_tick_percentage = 0.5f;
+		else if (_tick_percentage < .01f)
+			_tick_percentage = 0.f;
+		else if (_tick_percentage > .99f)
+			_tick_percentage = 1.f;
+
+		_CalculateTickOffset();
+	}
+}
+
+void WinMidi::MouseDown()
+{
+	if (_region_tick_offset_overlap)
+		_region_tick_offset_hold = true;
+}
+
+void WinMidi::MouseUp()
+{
+	_region_tick_offset_hold = false;
+}
+
 //Static window procedure
+#define WINMIDI ((WinMidi*)::GetWindowLongPtr(hWnd, GWLP_USERDATA))
 LRESULT CALLBACK WinMidi::_WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (msg == WM_CREATE)
@@ -265,15 +343,25 @@ LRESULT CALLBACK WinMidi::_WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, L
 		::DestroyWindow(hWnd);
 		break;
 
+	case WM_MOUSEMOVE:
+		WINMIDI->MouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		break;
+	case WM_LBUTTONDOWN:
+		WINMIDI->MouseDown();
+		break;
+	case WM_LBUTTONUP:
+		WINMIDI->MouseUp();
+		break;
+
 	case WM_COMMAND:
-		((WinMidi*)::GetWindowLongPtr(hWnd, GWLP_USERDATA))->Command(LOWORD(wParam));
+		WINMIDI->Command(LOWORD(wParam));
 		break;
 	case WM_SIZE:
-		((WinMidi*)::GetWindowLongPtr(hWnd, GWLP_USERDATA))->Resize(LOWORD(lParam), HIWORD(lParam));
+		WINMIDI->Resize	(LOWORD(lParam), HIWORD(lParam));
 		break;
 	default:
 		return ::DefWindowProc(hWnd, msg, wParam, lParam);
 	}
 
-	return 0;
+	return 1;
 }
