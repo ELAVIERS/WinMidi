@@ -22,12 +22,18 @@ HCURSOR grabber = ::LoadCursor(NULL, IDC_HAND);
 
 void WinMidi::Initialise(HINSTANCE instance)
 {
-	::SetCursor(arrow);
+	//Variables
+	_tick_marker_enabled = _progress_bar_enabled = true;
+	_flip_axes = false;
+
 	//Create window
 	_window_class.Initialise("WinMidi_Window", instance, MAKEINTRESOURCE(IDR_MENU), _WindowProcedure);
 	_window.Initialise("WinMidi_Window", instance, "WinMidi", this);
 	_accelerators = ::LoadAccelerators(instance, MAKEINTRESOURCE(IDR_ACCELERATORS));
 
+	SetMenuItemChecked(ID_VIEW_TICKMARKER, _tick_marker_enabled);
+	SetMenuItemChecked(ID_VIEW_PROGRESSBAR, _progress_bar_enabled);
+	SetMenuItemChecked(ID_VIEW_VERTICAL, _flip_axes);
 	//Direct2D
 	::D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_d2d_factory);
 
@@ -37,11 +43,13 @@ void WinMidi::Initialise(HINSTANCE instance)
 	_d2d_factory->CreateHwndRenderTarget(
 			D2D1::RenderTargetProperties(),
 			D2D1::HwndRenderTargetProperties(_window.GetHandle(), 
-			D2D1::SizeU(rect.right - rect.left, rect.bottom - rect.top), 
+			D2D1::SizeU(),
 			D2D1_PRESENT_OPTIONS_IMMEDIATELY),
 		&_d2d_render_target);
 
 	_d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(0), &_brush);
+
+	Resize(rect.right - rect.left, rect.bottom - rect.top);
 
 	//Misc
 	_tick_percentage = 0.5f;
@@ -105,7 +113,7 @@ void WinMidi::_Update(double delta_seconds)
 	_player.Update(delta_seconds * _tempo_multiplier);
 
 	static char s[64];
-	snprintf(s, 64, "Tick %u, Note Length:%d, Speed Multiplier:%.2f %d %d", _player.GetCurrentTick(), _note_sheet.GetPixelsPerCrotchet(), _tempo_multiplier, _cursor_pos.x, _cursor_pos.y);
+	snprintf(s, 64, "Tick %u, Note Length:%d, Speed Multiplier:%.2f", _player.GetCurrentTick(), _note_sheet.GetPixelsPerCrotchet(), _tempo_multiplier);
 	::SetWindowText(_window.GetHandle(), s);
 }
 
@@ -119,14 +127,38 @@ void WinMidi::_Render()
 		_d2d_render_target->SetTransform(D2D1::Matrix3x2F::Identity());
 
 		//Draw UI
-		_brush->SetColor(D2D1::ColorF(0xFFFFFF));
-		if (!_flip_axes)
-			_d2d_render_target->DrawLine(D2D1::Point2F((float)_tick_offset, 0), D2D1::Point2F((float)_tick_offset, (float)_window_size.height), _brush, .25f);
-		else
-			_d2d_render_target->DrawLine(D2D1::Point2F(0, (float)(_tick_offset)), 
-				 D2D1::Point2F((float)_window_size.width, (float)(_tick_offset)), _brush, .25f);
+		if (_tick_marker_enabled)
+		{
+			_brush->SetColor(D2D1::ColorF(0xFFFFFF));
+			if (!_flip_axes)
+				_d2d_render_target->DrawLine(D2D1::Point2F((float)_tick_offset, 0),
+					D2D1::Point2F((float)_tick_offset, (float)_note_sheet.GetSize().height),
+					_brush, .25f);
+			else
+				_d2d_render_target->DrawLine(D2D1::Point2F(0, (float)(_tick_offset)),
+					D2D1::Point2F((float)_note_sheet.GetSize().width, (float)(_tick_offset)),
+					_brush, .25f);
+		}
+
+		if (_progress_bar_enabled)
+		{
+			_brush->SetColor(D2D1::ColorF(0));
+			_d2d_render_target->FillRectangle(_progress_rect_bg, _brush);
+			_brush->SetColor(D2D1::ColorF(0x00AA00));
+			_progress_rect.right = _window_size.width * ((float)_player.GetCurrentTick() / (float)_note_sheet.GetLength());
+			_d2d_render_target->FillRectangle(_progress_rect, _brush);
+		}
 
 		_d2d_render_target->EndDraw();
+}
+//////////////////////////////////////
+
+void WinMidi::SetMenuItemChecked(int id, bool check)
+{
+	static char text[32];
+
+	::GetMenuString(_window.GetMenu(), id, text, 32, MF_BYCOMMAND);
+	::ModifyMenu(_window.GetMenu(), id, MF_BYCOMMAND | (check ? MF_CHECKED : MF_UNCHECKED), id, text);
 }
 
 void WinMidi::_CalculateTickOffset()
@@ -135,15 +167,15 @@ void WinMidi::_CalculateTickOffset()
 
 	if (_flip_axes)
 	{
-		_tick_offset = (short)(_window_size.height * _tick_percentage);
-		_region_tick_offset.Set(0, _tick_offset > AreaWidth ? _tick_offset - AreaWidth : 0,
-								_window_size.width, _tick_offset + AreaWidth);
+		_tick_offset = (short)(_note_sheet.GetSize().height * _tick_percentage);
+		_region_tick_marker.Set(0, _tick_offset > AreaWidth ? _tick_offset - AreaWidth : 0,
+			_note_sheet.GetSize().width, _tick_offset + AreaWidth);
 	}
 	else
 	{
-		_tick_offset = (short)(_window_size.width  * _tick_percentage);
-		_region_tick_offset.Set(_tick_offset > AreaWidth ? _tick_offset - AreaWidth : 0, 0, 
-			_tick_offset + AreaWidth, _window_size.height);
+		_tick_offset = (short)(_note_sheet.GetSize().width  * _tick_percentage);
+		_region_tick_marker.Set(_tick_offset > AreaWidth ? _tick_offset - AreaWidth : 0, 0, 
+			_tick_offset + AreaWidth, _note_sheet.GetSize().height);
 	}
 
 	_note_sheet.SetTickOffset(_tick_offset);
@@ -191,6 +223,107 @@ void WinMidi::_ToggleFullscreen()
 	}
 }
 
+void WinMidi::Resize(unsigned int width, unsigned int height)
+{
+	_window_size = D2D1::SizeU(width, height);
+
+	_UpdateSizes();
+}
+
+void WinMidi::_UpdateSizes()
+{
+	_note_sheet.Resize(D2D1::SizeU(_window_size.width, _window_size.height - (_progress_bar_enabled ? 32 : 0)));
+
+	_progress_rect.top = _progress_rect_bg.top = (float)_note_sheet.GetSize().height;
+	_progress_rect.bottom = _progress_rect_bg.bottom = (float)_window_size.height;
+	_progress_rect_bg.right = (float)_window_size.width;
+
+	_region_progress_bar.Set(0, _note_sheet.GetSize().height, _window_size.width, _window_size.height);
+
+	_CalculateTickOffset();
+
+	if (_d2d_render_target) {
+		_d2d_render_target->Resize(_window_size);
+		_Render(); //Redraw the frame
+	}
+}
+
+void WinMidi::MouseMove(short x, short y)
+{
+	_cursor_pos = { x, y };
+
+	_MouseUpdate();
+}
+
+void WinMidi::MouseDown()
+{
+	if (_region_progress_bar_overlap)
+	{
+		_region_progress_bar_hold = true;
+		_was_playing = _player.IsPlaying();
+		_player.Pause();
+	}
+	else if (_region_tick_marker_overlap)
+		_region_tick_marker_hold = true;
+
+	_MouseUpdate();
+}
+
+void WinMidi::MouseUp()
+{
+	_region_progress_bar_hold = _region_tick_marker_hold = false;
+
+	if (_was_playing)
+		_player.Play();
+}
+
+void WinMidi::_MouseUpdate()
+{
+	//If Cursor is over region change it
+	if (_progress_bar_enabled && _region_progress_bar.Overlaps((short)_cursor_pos.x, (short)_cursor_pos.y))
+	{
+		_region_progress_bar_overlap = true;
+		::SetCursor(grabber);
+	}
+	else
+	{
+		_region_progress_bar_overlap = false;
+
+		if (_tick_marker_enabled && _region_tick_marker.Overlaps((short)_cursor_pos.x, (short)_cursor_pos.y))
+		{
+			_region_tick_marker_overlap = true;
+			::SetCursor(grabber);
+		}
+		else
+		{
+			_region_tick_marker_overlap = false;
+			::SetCursor(arrow);
+		}
+	}
+
+	if (_region_progress_bar_hold )
+	{
+		if (_player.IsPlayable())
+			_player.UpdateTicks((_note_sheet.GetLength() * ((float)_cursor_pos.x / (float)_window_size.width)) - _player.GetCurrentTick());
+	}
+	else if (_region_tick_marker_hold)
+	{
+		if (_flip_axes)
+			_tick_percentage = (float)_cursor_pos.y / (float)_note_sheet.GetSize().height;
+		else
+			_tick_percentage = (float)_cursor_pos.x / (float)_note_sheet.GetSize().width;
+
+		if (_tick_percentage > .49f && _tick_percentage < .51f)
+			_tick_percentage = 0.5f;
+		else if (_tick_percentage < .01f)
+			_tick_percentage = 0.f;
+		else if (_tick_percentage > .99f)
+			_tick_percentage = 1.f;
+
+		_CalculateTickOffset();
+	}
+}
+
 void WinMidi::Command(int id)
 {
 	switch (id)
@@ -214,6 +347,21 @@ void WinMidi::Command(int id)
 		_player.Stop();
 		break;
 
+	case ID_VIEW_TICKMARKER:
+	case IDA_TICKMARKER:
+		_tick_marker_enabled = !_tick_marker_enabled;
+
+		SetMenuItemChecked(ID_VIEW_TICKMARKER, _tick_marker_enabled);
+		break;
+
+	case ID_VIEW_PROGRESSBAR:
+	case IDA_PROGRESSBAR:
+		_progress_bar_enabled = !_progress_bar_enabled;
+		_UpdateSizes();
+
+		SetMenuItemChecked(ID_VIEW_PROGRESSBAR, _progress_bar_enabled);
+		break;
+
 	case ID_VIEW_FULLSCREEN:
 	case IDA_FULLSCREEN:
 		_ToggleFullscreen();
@@ -225,9 +373,8 @@ void WinMidi::Command(int id)
 		_CalculateTickOffset();
 
 		_note_sheet.SetFlipAxes(_flip_axes);
-		_note_sheet.Resize(_window_size);
-		
-		::ModifyMenu(_window.GetMenu(), ID_VIEW_VERTICAL, MF_BYCOMMAND | (_flip_axes ? MF_CHECKED : MF_UNCHECKED), ID_VIEW_VERTICAL, "&Vertical\tF10");
+
+		SetMenuItemChecked(ID_VIEW_VERTICAL, _flip_axes);
 		break;
 	case ID_TOOLS_DUMP:
 		_file.DisplayStringToFile("events.txt");
@@ -236,7 +383,7 @@ void WinMidi::Command(int id)
 	case ID_HELP_ABOUT:
 		AboutDialog::Open(NULL, _window.GetHandle());
 		break;
-		
+
 	case IDA_QUIT:
 		PostQuitMessage(0);
 		break;
@@ -260,64 +407,6 @@ void WinMidi::Command(int id)
 		_player.Seek(-5.0);
 		break;
 	}
-}
-
-void WinMidi::Resize(unsigned int width, unsigned int height)
-{
-	_window_size = D2D1::SizeU(width, height);
-	_CalculateTickOffset();
-
-	_note_sheet.Resize(_window_size);
-
-	if (_d2d_render_target) {
-		_d2d_render_target->Resize(_window_size);
-		_Render(); //Redraw the frame
-	}
-}
-
-void WinMidi::MouseMove(short x, short y)
-{
-	_cursor_pos = { x, y };
-
-	//If Cursor is over region change it
-	if (_region_tick_offset.Overlaps((short)_cursor_pos.x, (short)_cursor_pos.y))
-	{
-		_region_tick_offset_overlap = true;
-		::SetCursor(grabber);
-	}
-	else
-	{
-		_region_tick_offset_overlap = false;
-		::SetCursor(arrow);
-	}
-
-	if (_region_tick_offset_hold)
-	{
-		if (_flip_axes)
-			_tick_percentage = (float)_cursor_pos.y / (float)_window_size.height;
-		else
-			_tick_percentage = (float)_cursor_pos.x / (float)_window_size.width;
-
-		if (_tick_percentage > .49f && _tick_percentage < .51f)
-			_tick_percentage = 0.5f;
-		else if (_tick_percentage < .01f)
-			_tick_percentage = 0.f;
-		else if (_tick_percentage > .99f)
-			_tick_percentage = 1.f;
-
-		_CalculateTickOffset();
-	}
-}
-
-void WinMidi::MouseDown()
-{
-	if (_region_tick_offset_overlap)
-		_region_tick_offset_hold = true;
-}
-
-void WinMidi::MouseUp()
-{
-	_region_tick_offset_hold = false;
 }
 
 //Static window procedure

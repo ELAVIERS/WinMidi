@@ -18,11 +18,14 @@ public:
 	inline void ResetNotes() { midiOutReset(_midi_out); };
 
 	void Update(double DeltaSeconds);
+	void UpdateTicks(signed int DeltaTicks);
 	void Seek(double Seconds);
 
 	void SetFile(MidiFile* File);
 
-	unsigned int GetCurrentTick() { return _tick; };
+	inline unsigned int GetCurrentTick() { return _tick; };
+	inline bool			IsPlaying() { return _playing; };
+	inline bool			IsPlayable() { return _file != NULL; };
 protected:
 	void _HandleEvent(const MidiEvent* MidiEvent);
 	static void _Callback(void*, const MidiEvent*);

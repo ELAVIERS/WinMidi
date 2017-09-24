@@ -31,6 +31,7 @@ void NoteSheet::Load(const vector<MidiTrack*>& tracks)
 	delete[] _notes;
 	_track_count = (unsigned short)tracks.size();
 	_notes = new vector<Note>[_track_count];
+	_length = 0;
 
 	bool first = true;
 
@@ -65,10 +66,16 @@ void NoteSheet::Load(const vector<MidiTrack*>& tracks)
 				}
 				else if (op == Events::Midi::NoteOff || (op == Events::Midi::NoteOn && !vel))
 				{
+					if (tick > _length)
+						_length = tick;
+
 					for (Note& note : _notes[i])
 					{
-						if (note.pitch == event->GetData()[0] && !note.end)
+						if (note.pitch == event->GetData()[0] && note.end == 0)
+						{
 							note.end = tick;
+							break;
+						}
 					}
 				}
 			}

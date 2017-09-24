@@ -36,6 +36,18 @@ void MidiPlayer::SetFile(MidiFile* file)
 	_seconds_per_tick = 0.5 / (double)_ticks_per_crotchet; //0.5 spc / tpc = 120bpm
 }
 
+void MidiPlayer::UpdateTicks(signed int ticks)
+{
+	if (ticks < 0) {
+		ResetNotes();
+		_file->Update(ticks, true);
+	}
+	else
+		_file->Update(ticks, false);
+
+	_tick += ticks;
+}
+
 void MidiPlayer::Update(double delta_seconds)
 {
 	if (!_playing || !_file)
@@ -47,8 +59,8 @@ void MidiPlayer::Update(double delta_seconds)
 	{
 		static signed int	ticks;
 		ticks = (signed int)(_elapsed_time / _seconds_per_tick);
-		_file->Update(ticks, false);
-		_tick += ticks;
+		
+		UpdateTicks(ticks);
 
 		_elapsed_time -= _seconds_per_tick * ticks;
 	}
