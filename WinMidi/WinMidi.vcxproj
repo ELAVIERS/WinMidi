@@ -75,6 +75,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <AdditionalDependencies>d2d1.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -85,6 +87,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <AdditionalDependencies>d2d1.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -97,6 +101,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -111,6 +117,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -119,7 +127,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AboutDialog.cpp" />
     <ClCompile Include="FileDialogManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MidiEvent.cpp" />
@@ -128,13 +135,13 @@
     <ClCompile Include="MidiTrack.cpp" />
     <ClCompile Include="NoteSheet.cpp" />
     <ClCompile Include="RectU.cpp" />
+    <ClCompile Include="WorkerThread.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowClass.cpp" />
     <ClCompile Include="WinMidi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AboutDialog.h" />
     <ClInclude Include="Error.h" />
     <ClInclude Include="FileDialogManager.h" />
     <ClInclude Include="Midi.h" />
@@ -145,6 +152,7 @@
     <ClInclude Include="Note.h" />
     <ClInclude Include="NoteSheet.h" />
     <ClInclude Include="RectU.h" />
+    <ClInclude Include="WorkerThread.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="MidiFileUtils.h" />
     <ClInclude Include="Timer.h" />

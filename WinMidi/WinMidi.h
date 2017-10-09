@@ -9,6 +9,7 @@
 #include "Timer.h"
 #include "Window.h"
 #include "WindowClass.h"
+#include "WorkerThread.h"
 
 class WinMidi
 {
@@ -19,6 +20,7 @@ public:
 	void Initialise(HINSTANCE Instance);
 
 	HRESULT Run(int CmdShow); //returns when the window receives WM_QUIT
+	void Frame();
 
 	void Command(int id);
 	void Resize(unsigned int width, unsigned int height);
@@ -30,6 +32,8 @@ public:
 	void MouseUp();
 
 	void SetMenuItemChecked(int Id, bool Checked);
+
+	inline bool IsRunning() { return _running; };
 protected:
 	//D2d
 	ID2D1Factory*			_d2d_factory;
@@ -47,7 +51,12 @@ protected:
 	MidiFile				_file;
 	MidiPlayer				_player;
 	NoteSheet				_note_sheet;
+	//worker
+	WorkerThread			_worker;
+	bool					_worker_active;
 
+	//General variables
+	bool					_running;
 	float					_run_time;
 	POINT					_cursor_pos;
 
@@ -77,12 +86,11 @@ protected:
 	void _CalculateTickOffset();
 	void _UpdateSizes();
 
-	void _Frame();
-	void _Update(double DeltaSeconds);
-	void _Render();
-
 	void _ToggleFullscreen();
 	void _MouseUpdate();
+
+	void _Update(double DeltaSeconds);
+	void _Render();
 
 	static LRESULT CALLBACK _WindowProcedure(HWND WindowHandle, UINT Message, WPARAM WideParam, LPARAM LongParam);
 };

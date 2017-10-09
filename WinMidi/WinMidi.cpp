@@ -1,12 +1,11 @@
 #include "WinMidi.h"
 
 #include "Error.h"
-#include "AboutDialog.h"
 #include "FileDialogManager.h"
 #include "Midi.h"
 #include "resource.h"
 
-#include <windowsx.h>
+#include <Windowsx.h>
 
 WinMidi::WinMidi()
 {
@@ -72,24 +71,25 @@ void WinMidi::LoadMIDIFile(const char* file, bool play)
 HRESULT WinMidi::Run(int cmd_show)
 {
 	_window.Show(cmd_show);
+
+	_running = _worker_active = true;
 	
+	WorkerThread worker;
+	worker.Start(this);
+
 	MSG		msg;
 	
-	while (1)
+	while (::GetMessage(&msg, NULL, 0, 0) > 0)
 	{
-		if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (!::TranslateAccelerator(_window.GetHandle(), _accelerators, &msg))
 		{
-			if (msg.message == WM_QUIT)
-				break;
-
-			if (!::TranslateAccelerator(_window.GetHandle(), _accelerators, &msg))
-			{
-				::TranslateMessage(&msg);
-				::DispatchMessage(&msg);
-			}
+			::TranslateMessage(&msg);
+			::DispatchMessage(&msg);
 		}
-		else _Frame();
 	}
+
+	_running = false;	//Signal threads to stop
+	worker.WaitForStop(); //Wait for threads to stop
 
 	_brush->Release();
 	_d2d_render_target->Release();
@@ -98,14 +98,17 @@ HRESULT WinMidi::Run(int cmd_show)
 	return (HRESULT)msg.wParam;
 }
 
-void WinMidi::_Frame()
+void WinMidi::Frame()
 {
-	static double delta_seconds = 0.0;
-	_timer.Start();
-	_Update(delta_seconds);
-	_Render();
-	delta_seconds = _timer.Stop();
-	_run_time += (float)delta_seconds;
+	if (_worker_active)
+	{
+		static double delta_seconds = 0.0;
+		_timer.Start();
+		_Update(delta_seconds);
+		_Render();
+		delta_seconds = _timer.Stop();
+		_run_time += (float)delta_seconds;
+	}
 }
 
 void WinMidi::_Update(double delta_seconds)
@@ -244,7 +247,7 @@ void WinMidi::_UpdateSizes()
 
 	if (_d2d_render_target) {
 		_d2d_render_target->Resize(_window_size);
-		_Render(); //Redraw the frame
+		//_Render(); //Redraw the frame
 	}
 }
 
@@ -304,7 +307,7 @@ void WinMidi::_MouseUpdate()
 	if (_region_progress_bar_hold )
 	{
 		if (_player.IsPlayable())
-			_player.UpdateTicks((_note_sheet.GetLength() * ((float)_cursor_pos.x / (float)_window_size.width)) - _player.GetCurrentTick());
+			_player.UpdateTicks((unsigned int)(_note_sheet.GetLength() * ((float)_cursor_pos.x / (float)_window_size.width)) - _player.GetCurrentTick());
 	}
 	else if (_region_tick_marker_hold)
 	{
@@ -331,9 +334,16 @@ void WinMidi::Command(int id)
 	case ID_FILE_OPEN:
 	case IDA_OPEN:
 	{
+		_worker_active = false;
+		_player.Pause();
+
 		std::string file_path;
 		if (FileDialogManager::OpenFile(file_path))
 			LoadMIDIFile(file_path.c_str());
+		else 
+			_player.Play();
+
+		_worker_active = true;
 		break;
 	}
 
@@ -379,9 +389,6 @@ void WinMidi::Command(int id)
 	case ID_TOOLS_DUMP:
 		_file.DisplayStringToFile("events.txt");
 		::ShellExecute(NULL, "open", "events.txt", NULL, NULL, SW_SHOWMAXIMIZED);
-		break;
-	case ID_HELP_ABOUT:
-		AboutDialog::Open(NULL, _window.GetHandle());
 		break;
 
 	case IDA_QUIT:

@@ -1,11 +1,7 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by WinMidi.rc
-//
 #define IDI_ICON                        101
+
 #define IDR_MENU                        102
-#define IDD_ABOUT                       103
-#define IDR_ACCELERATORS                104
+#define IDR_ACCELERATORS                103
 
 #define IDA_FULLSCREEN                  4001
 #define IDA_NOTEPLUS                    4002
@@ -32,14 +28,3 @@
 #define ID_VIEW_VERTICAL                40008
 #define ID_TOOLS_DUMP                   40009
 #define ID_HELP_ABOUT                   400010
-
-// Next default values for new objects
-// 
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        105
-#define _APS_NEXT_COMMAND_VALUE         4015
-#define _APS_NEXT_CONTROL_VALUE         1001
-#define _APS_NEXT_SYMED_VALUE           101
-#endif
-#endif
