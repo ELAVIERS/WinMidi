@@ -2,6 +2,7 @@
 #include <Windows.h>
 
 #include <string>
+#include <vector>
 
 enum EventType
 {
@@ -33,6 +34,8 @@ public:
 	const std::string		GetDisplayString();
 
 	DWORD ToDWORD() const;
+
+	void PushToVector(std::vector<unsigned char> &vec, unsigned char lastmessage) const;
 private:
 	unsigned char*	_data;
 	unsigned char	_data_length;

@@ -40,10 +40,10 @@ void MidiPlayer::UpdateTicks(signed int ticks)
 {
 	if (ticks < 0) {
 		ResetNotes();
-		_file->Update(ticks, true);
+		_file->Update(ticks);
 	}
 	else
-		_file->Update(ticks, false);
+		_file->Update(ticks);
 
 	_tick += ticks;
 }
@@ -71,7 +71,7 @@ void MidiPlayer::Seek(double seconds)
 	ResetNotes();
 
 	signed int ticks = (signed int)(seconds / _seconds_per_tick);
-	_file->Update(ticks, true);
+	_file->Update(ticks);
 	_tick += ticks;
 }
 
@@ -88,7 +88,9 @@ void MidiPlayer::_HandleEvent(const MidiEvent* event)
 		{
 		case Events::Meta::Tempo:
 			const unsigned char* data = event->GetData();
-			_seconds_per_tick = ((data[0] << 16) + (data[1] << 8) + data[2]) / 1000000.0 / _ticks_per_crotchet;
+			_tempo = (data[0] << 16) + (data[1] << 8) + data[2];
+			
+			_seconds_per_tick = _tempo / 1000000.0 / _ticks_per_crotchet;
 			break;
 		}
 

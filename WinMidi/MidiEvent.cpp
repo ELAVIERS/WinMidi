@@ -1,6 +1,7 @@
 #include "MidiEvent.h"
 
 #include "Midi.h"
+#include "MidiVectorUtils.h"
 #include "MidiFileUtils.h"
 
 MidiEvent* MidiEvent::LoadEvent(const unsigned char* buffer, unsigned int& pos)
@@ -70,6 +71,21 @@ DWORD MidiEvent::ToDWORD() const
 }
 
 using namespace std;
+
+void MidiEvent::PushToVector(vector<unsigned char> &vec, unsigned char lastmessage) const {
+	MidiVectorUtils::VariableLengthIntToBuffer(vec, delta_ticks);
+
+	if (type == META) {
+		vec.push_back(0xFF);
+		vec.push_back(message);
+		vec.push_back(_data_length);
+	}
+	else if (message != lastmessage)
+		vec.push_back(message);
+
+	for (unsigned char i = 0; i < _data_length; ++i)
+		vec.push_back(_data[i]);
+}
 
 inline const string ByteToHex(unsigned char byte)
 {

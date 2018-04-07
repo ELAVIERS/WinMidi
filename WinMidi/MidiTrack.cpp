@@ -3,6 +3,7 @@
 #include "Midi.h"
 #include "MidiEvent.h"
 #include "MidiFileUtils.h"
+#include "MidiVectorUtils.h"
 
 MidiTrack::MidiTrack() : _ticks(0), _event_index(0)
 {
@@ -17,7 +18,7 @@ MidiTrack::~MidiTrack()
 	_events.clear();
 }
 
-void MidiTrack::Update(signed int delta_ticks, bool silent)
+void MidiTrack::Update(signed int delta_ticks)
 {
 	_ticks += delta_ticks;
 
@@ -32,21 +33,21 @@ void MidiTrack::Update(signed int delta_ticks, bool silent)
 	}
 	else
 	{
-		while (_event_index + 1 < _events.size() && (unsigned int)_ticks >= _events[_event_index + 1]->delta_ticks)
+		while (_event_index < _events.size() && (unsigned int)_ticks >= _events[_event_index]->delta_ticks)
 		{
-			_event_index++;
-
 			_ticks -= _events[_event_index]->delta_ticks;
 
-			if (_callback && (!silent || _events[_event_index]->GetMessageUpper() != Events::Midi::NoteOn))
+			if (_callback)
 				_callback(_callback_owner, _events[_event_index]);
+
+			++_event_index;
 		}
 	}
 }
 
 void MidiTrack::LoadFromBuffer(const unsigned char* buffer, unsigned int& pos)
 {
-	_length = MidiFileUtils::ReadInt(buffer, pos);
+	_length = MidiFileUtils::ReadInt32(buffer, pos);
 	
 	unsigned int end = pos + _length;
 
@@ -68,4 +69,27 @@ const string MidiTrack::GetDisplayString() const
 	}
 
 	return str;
+}
+
+std::string MidiTrack::PushToVector(vector<unsigned char> &vec) const {
+	vec.push_back('M'); vec.push_back('T'); vec.push_back('r'); vec.push_back('k');
+
+	MidiVectorUtils::Int32ToVector(vec, _length);
+
+	std::string name;
+
+	unsigned char lastmessage = 0;
+	for (MidiEvent* event : _events)
+	{
+		event->PushToVector(vec, lastmessage);
+		lastmessage = event->message;
+
+		if (event->message == Events::Meta::TrackName)
+		{
+			for (unsigned char i = 0; i < event->GetDataLength(); ++i)
+				name.push_back(event->GetData()[i]);
+		}
+	}
+
+	return name;
 }

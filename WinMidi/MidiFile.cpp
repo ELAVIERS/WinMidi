@@ -2,6 +2,7 @@
 
 #include "Error.h"
 #include "MidiFileUtils.h"
+#include "MidiVectorUtils.h"
 
 #include <fstream>
 
@@ -48,26 +49,26 @@ bool MidiFile::LoadFromFile(const char* path)
 		return false;
 	}
 
-	_header_length = ReadInt(buffer, pos);
+	_header_length = ReadInt32(buffer, pos);
 	if (_header_length != 6)
 	{
 		ErrorMessage("U WOT (header length is not 6)");
 		return false;
 	}
 
-	_format = ReadShort(buffer, pos);
-	_track_count = ReadShort(buffer, pos);
-	short division = ReadShort(buffer, pos);
+	_format = ReadInt16(buffer, pos);
+	track_count = ReadInt16(buffer, pos);
+	_division = ReadInt16(buffer, pos);
 
-	_use_timecode = division & 0x8000;
+	_use_timecode = _division & 0x8000;
 
 	if (_use_timecode)
 	{						   //0b0100 0000 0000 0000
-		_timecode_fps = ((division & 0x4000) ? -64 : 0) + ((division & 0x3F00) >> 8); //0b0011 1111 0000 0000
-		_ticks_per_frame = division & 0x00FF;
+		_timecode_fps = ((_division & 0x4000) ? -64 : 0) + ((_division & 0x3F00) >> 8); //0b0011 1111 0000 0000
+		_ticks_per_frame = _division & 0x00FF;
 	}
 	else
-		_ticks_per_crotchet = division;
+		_ticks_per_crotchet = _division;
 
 	while (ReadStringAndCheck(buffer, pos, 4, "MTrk"))
 	{
@@ -82,7 +83,7 @@ bool MidiFile::LoadFromFile(const char* path)
 
 const string MidiFile::GetDisplayString() const
 {
-	string str = "Header:\tFormat " + to_string(_format) + "\t\t" + to_string(_track_count) + " Chunks\t";
+	string str = "Header:\tFormat " + to_string(_format) + "\t\t" + to_string(track_count) + " Chunks\t";
 
 	if (_use_timecode) str += to_string(_timecode_fps) + " FPS\t\t" + to_string(_ticks_per_frame) + " Ticks per frame\n";
 	else str += to_string(_ticks_per_crotchet) + " Ticks per beat\n";
@@ -99,10 +100,10 @@ void MidiFile::ResetTracks()
 		(*track)->Reset();
 }
 
-void MidiFile::Update(signed int delta_ticks, bool silent)
+void MidiFile::Update(signed int delta_ticks)
 {
 	for (auto track = _tracks.begin(); track != _tracks.end(); ++track)
-		(*track)->Update(delta_ticks, silent);
+		(*track)->Update(delta_ticks);
 }
 
 void MidiFile::SetCallback(void* owner, void(*callback)(void*, const MidiEvent*))
@@ -118,4 +119,17 @@ void MidiFile::DisplayStringToFile(const char* path)
 	file << GetDisplayString();
 
 	file.close();
+}
+
+std::string MidiFile::PushToVector(std::vector<unsigned char> &vec, int track) {
+	vec.push_back('M'); vec.push_back('T'); vec.push_back('h'); vec.push_back('d');
+
+	using namespace MidiVectorUtils;
+
+	Int32ToVector(vec, 6);
+	Int16ToVector(vec, _format);
+	Int16ToVector(vec, 1); //Always one track
+	Int16ToVector(vec, _division);
+
+	return _tracks[track]->PushToVector(vec);
 }

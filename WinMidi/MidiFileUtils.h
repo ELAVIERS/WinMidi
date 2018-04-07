@@ -32,17 +32,17 @@ namespace MidiFileUtils
 		return true;
 	}
 
-	inline short ReadShort(const unsigned char* buffer, unsigned int& pos)
+	inline __int16 ReadInt16(const unsigned char* buffer, unsigned int& pos)
 	{
-		short value = (buffer[pos] << 8) + buffer[pos + 1];
+		__int16 value = (buffer[pos] << 8) + buffer[pos + 1];
 
 		pos += 2;
 		return value;
 	}
 
-	inline int ReadInt(const unsigned char* buffer, unsigned int& pos)
+	inline __int32 ReadInt32(const unsigned char* buffer, unsigned int& pos)
 	{
-		int value = (buffer[pos] << 24) + (buffer[pos + 1] << 16) + (buffer[pos + 2] << 8) + buffer[pos + 3];
+		__int32 value = (buffer[pos] << 24) + (buffer[pos + 1] << 16) + (buffer[pos + 2] << 8) + buffer[pos + 3];
 
 		pos += 4;
 		return value;

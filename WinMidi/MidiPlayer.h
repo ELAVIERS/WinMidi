@@ -34,6 +34,7 @@ protected:
 	bool			_playing;
 	unsigned int	_tick;
 	double			_seconds_per_tick;
+	unsigned int	_tempo;
 
 	HMIDIOUT		_midi_out;
 

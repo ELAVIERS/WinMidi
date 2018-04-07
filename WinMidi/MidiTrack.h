@@ -1,6 +1,7 @@
 #pragma once
 #include "MidiEvent.h"
 
+#include <string>
 #include <vector>
 
 class MidiTrack
@@ -10,13 +11,15 @@ public:
 	~MidiTrack();
 
 	void LoadFromBuffer(const unsigned char* buffer, unsigned int& pos);
-	void Update(signed int DeltaTicks, bool Silent);
+	void Update(signed int DeltaTicks);
 	inline void Reset() { _ticks = _event_index = 0; }
 
 	inline const std::vector<MidiEvent*>& getEvents() const { return _events; };
 	const std::string GetDisplayString() const;
 
 	inline void SetCallback(void* Owner, void(*_Callback)(void*, const MidiEvent*)) { _callback_owner = Owner; _callback = _Callback; };
+
+	std::string PushToVector(std::vector<unsigned char> &vec) const;
 protected:
 	std::vector<MidiEvent*> _events;
 

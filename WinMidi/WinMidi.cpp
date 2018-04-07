@@ -2,6 +2,7 @@
 
 #include "Error.h"
 #include "FileDialogManager.h"
+#include "FileIO.h"
 #include "Midi.h"
 #include "resource.h"
 
@@ -389,6 +390,18 @@ void WinMidi::Command(int id)
 	case ID_TOOLS_DUMP:
 		_file.DisplayStringToFile("events.txt");
 		::ShellExecute(NULL, "open", "events.txt", NULL, NULL, SW_SHOWMAXIMIZED);
+		break;
+	case ID_TOOLS_MIDITRACKEXP:
+		for (int i = 0; i < _file.track_count; ++i)
+		{
+			std::vector<unsigned char> filevec;
+			std::string file_name = _file.PushToVector(filevec, i);
+			if (file_name.length()) file_name += ' ';
+			file_name += '(' + std::to_string(i) + ").mid";
+
+			FileIO::BufferToFile(filevec.data(), filevec.size(), file_name.c_str());
+		}
+
 		break;
 
 	case IDA_QUIT:

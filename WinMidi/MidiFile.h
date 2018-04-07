@@ -16,7 +16,7 @@ public:
 
 	//Tracks
 	void ResetTracks();
-	void Update(signed int DeltaTicks, bool Silent);
+	void Update(signed int DeltaTicks);
 	void SetCallback(void* Owner, void(*Callback)(void*, const MidiEvent*));
 
 	//Getters
@@ -25,13 +25,18 @@ public:
 	inline unsigned short GetTicksPerCrotchet() const				{ return _ticks_per_crotchet; };
 
 	const std::string GetDisplayString() const;
+
+	std::string PushToVector(std::vector<unsigned char> &vec, int track);
 protected:
 	std::vector<MidiTrack*>	_tracks;
 
 	//Header
 	unsigned int			_header_length;
 	unsigned short			_format;
-	unsigned short			_track_count;
+public:
+	unsigned short			track_count;
+protected:
+	unsigned short			_division;
 
 	//Timecode
 	bool					_use_timecode;
