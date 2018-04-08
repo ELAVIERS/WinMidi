@@ -110,8 +110,8 @@ void NoteSheet::Render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrus
 		* _view_matrix
 		);
 
-	unsigned int screen_ticks = ((float)_size.width / (float)_pixels_per_crotchet) * _ticks_per_crotchet;
-	float tick_percent = (float)_tick_offset / (float)_size.width;
+	unsigned int screen_ticks = ((_flip_axes ? (float)_size.height : (float)_size.width) / (float)_pixels_per_crotchet) * _ticks_per_crotchet;
+	float tick_percent = (float)_tick_offset / (_flip_axes ? (float)_size.height : (float)_size.width);
 
 	unsigned int upper_bound = tick + screen_ticks * (1.f - tick_percent);
 	unsigned int lower_bound = (tick > screen_ticks * tick_percent ? tick - screen_ticks * tick_percent : 0);

@@ -65,7 +65,7 @@ void WinMidi::LoadMIDIFile(const char* file, bool play)
 	_note_sheet.SetTicksPerCrotchet(_file.GetTicksPerCrotchet());
 	_player.SetFile(&_file);
 
-	if(play)
+	if (play)
 		_player.Play();
 }
 
@@ -99,13 +99,13 @@ HRESULT WinMidi::Run(int cmd_show)
 void WinMidi::Frame()
 {
 	static double delta_seconds = 0.0;
-	//_timer.Start();
+	_timer.Start();
 	if (_pending_size_change)
 		_UpdateSizes();
 
 	_Update(delta_seconds);
 	_Render();
-	delta_seconds = _timer.Stop(); _timer.Start();
+	delta_seconds = _timer.Stop();
 	_run_time += (float)delta_seconds;
 }
 
@@ -355,13 +355,11 @@ void WinMidi::Command(int id)
 
 	case ID_FILE_PLAY:
 		_player.Play();
-		_timer.Start();
 		_UpdateTitle();
 		break;
 
 	case IDA_PLAY:
 		_player.Toggle();
-		_timer.Start();
 		_UpdateTitle();
 		break;
 
