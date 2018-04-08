@@ -32,7 +32,7 @@ DWORD WINAPI WorkerThread::_Run(LPVOID param)
 {
 	WinMidi *process = (WinMidi*)param;
 
-	while (process->IsRunning())
+	while (process->IsRunningThread())
 	{
 		process->Frame();
 	}

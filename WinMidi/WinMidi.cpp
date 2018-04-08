@@ -72,11 +72,8 @@ void WinMidi::LoadMIDIFile(const char* file, bool play)
 HRESULT WinMidi::Run(int cmd_show)
 {
 	_window.Show(cmd_show);
-
-	_running = _worker_active = true;
 	
-	WorkerThread worker;
-	worker.Start(this);
+	_StartWorker();
 
 	MSG		msg;
 	
@@ -89,8 +86,7 @@ HRESULT WinMidi::Run(int cmd_show)
 		}
 	}
 
-	_running = false;	//Signal threads to stop
-	worker.WaitForStop(); //Wait for threads to stop
+	_StopWorker();
 
 	_brush->Release();
 	_d2d_render_target->Release();
@@ -99,61 +95,64 @@ HRESULT WinMidi::Run(int cmd_show)
 	return (HRESULT)msg.wParam;
 }
 
+//Runs on worker
 void WinMidi::Frame()
 {
-	if (_worker_active)
-	{
-		static double delta_seconds = 0.0;
-		_timer.Start();
-		_Update(delta_seconds);
-		_Render();
-		delta_seconds = _timer.Stop();
-		_run_time += (float)delta_seconds;
-	}
+	static double delta_seconds = 0.0;
+	//_timer.Start();
+	if (_pending_size_change)
+		_UpdateSizes();
+
+	_Update(delta_seconds);
+	_Render();
+	delta_seconds = _timer.Stop(); _timer.Start();
+	_run_time += (float)delta_seconds;
 }
 
 void WinMidi::_Update(double delta_seconds)
 {
 	_player.Update(delta_seconds * _tempo_multiplier);
+}
 
-	static char s[64];
-	snprintf(s, 64, "Tick %u, Note Length:%d, Speed Multiplier:%.2f", _player.GetCurrentTick(), _note_sheet.GetPixelsPerCrotchet(), _tempo_multiplier);
+void WinMidi::_UpdateTitle() {
+	char s[64];
+	snprintf(s, 64, "WinMidi (Note Length:%d, Speed Multiplier:%.2f)", _note_sheet.GetPixelsPerCrotchet(), _tempo_multiplier);
 	::SetWindowText(_window.GetHandle(), s);
 }
 
 void WinMidi::_Render()
 {
-		_d2d_render_target->BeginDraw();
-		_d2d_render_target->Clear(D2D1::ColorF(0x222222));
+	_d2d_render_target->BeginDraw();
+	_d2d_render_target->Clear(D2D1::ColorF(0x222222));
 		
-		//Draw Notes and reset transform
-		_note_sheet.Render(_d2d_render_target, _brush, _player.GetCurrentTick());
-		_d2d_render_target->SetTransform(D2D1::Matrix3x2F::Identity());
+	//Draw Notes and reset transform
+	_note_sheet.Render(_d2d_render_target, _brush, _player.GetCurrentTick());
+	_d2d_render_target->SetTransform(D2D1::Matrix3x2F::Identity());
 
-		//Draw UI
-		if (_tick_marker_enabled)
-		{
-			_brush->SetColor(D2D1::ColorF(0xFFFFFF));
-			if (!_flip_axes)
-				_d2d_render_target->DrawLine(D2D1::Point2F((float)_tick_offset, 0),
-					D2D1::Point2F((float)_tick_offset, (float)_note_sheet.GetSize().height),
-					_brush, .25f);
-			else
-				_d2d_render_target->DrawLine(D2D1::Point2F(0, (float)(_tick_offset)),
-					D2D1::Point2F((float)_note_sheet.GetSize().width, (float)(_tick_offset)),
-					_brush, .25f);
-		}
+	//Draw UI
+	if (_tick_marker_enabled)
+	{
+		_brush->SetColor(D2D1::ColorF(0xFFFFFF));
+		if (!_flip_axes)
+			_d2d_render_target->DrawLine(D2D1::Point2F((float)_tick_offset, 0),
+				D2D1::Point2F((float)_tick_offset, (float)_note_sheet.GetSize().height),
+				_brush, .25f);
+		else
+			_d2d_render_target->DrawLine(D2D1::Point2F(0, (float)(_tick_offset)),
+				D2D1::Point2F((float)_note_sheet.GetSize().width, (float)(_tick_offset)),
+				_brush, .25f);
+	}
 
-		if (_progress_bar_enabled)
-		{
-			_brush->SetColor(D2D1::ColorF(0));
-			_d2d_render_target->FillRectangle(_progress_rect_bg, _brush);
-			_brush->SetColor(D2D1::ColorF(0x00AA00));
-			_progress_rect.right = _window_size.width * ((float)_player.GetCurrentTick() / (float)_note_sheet.GetLength());
-			_d2d_render_target->FillRectangle(_progress_rect, _brush);
-		}
+	if (_progress_bar_enabled)
+	{
+		_brush->SetColor(D2D1::ColorF(0));
+		_d2d_render_target->FillRectangle(_progress_rect_bg, _brush);
+		_brush->SetColor(D2D1::ColorF(0x00AA00));
+		_progress_rect.right = _window_size.width * ((float)_player.GetCurrentTick() / (float)_note_sheet.GetLength());
+		_d2d_render_target->FillRectangle(_progress_rect, _brush);
+	}
 
-		_d2d_render_target->EndDraw();
+	_d2d_render_target->EndDraw();
 }
 //////////////////////////////////////
 
@@ -234,12 +233,14 @@ void WinMidi::Resize(unsigned int width, unsigned int height)
 {
 	_window_size = D2D1::SizeU(width, height);
 
-	_CalculateTickOffset();
-	_UpdateSizes();
+	_pending_size_change = true;
 }
 
 void WinMidi::_UpdateSizes()
 {
+	_pending_size_change = false;
+
+	_CalculateTickOffset();
 	_note_sheet.Resize(D2D1::SizeU(_window_size.width, _window_size.height - (_progress_bar_enabled ? 32 : 0)));
 
 	_progress_rect.top = _progress_rect_bg.top = (float)_note_sheet.GetSize().height;
@@ -248,10 +249,8 @@ void WinMidi::_UpdateSizes()
 
 	_region_progress_bar.Set(0, _note_sheet.GetSize().height, _window_size.width, _window_size.height);
 
-	if (_d2d_render_target) {
+	if (_d2d_render_target)
 		_d2d_render_target->Resize(_window_size);
-		//_Render(); //Redraw the frame
-	}
 }
 
 void WinMidi::MouseMove(short x, short y)
@@ -309,8 +308,11 @@ void WinMidi::_MouseUpdate()
 
 	if (_region_progress_bar_hold )
 	{
-		if (_player.IsPlayable())
+		if (_player.IsPlayable()) {
+			_StopWorker();
 			_player.UpdateTicks((unsigned int)(_note_sheet.GetLength() * ((float)_cursor_pos.x / (float)_window_size.width)) - _player.GetCurrentTick());
+			_StartWorker();
+		}
 	}
 	else if (_region_tick_marker_hold)
 	{
@@ -337,7 +339,8 @@ void WinMidi::Command(int id)
 	case ID_FILE_OPEN:
 	case IDA_OPEN:
 	{
-		_worker_active = false;
+		_StopWorker();
+
 		_player.Pause();
 
 		std::string file_path;
@@ -346,13 +349,20 @@ void WinMidi::Command(int id)
 		else 
 			_player.Play();
 
-		_worker_active = true;
+		_StartWorker();
 		break;
 	}
 
 	case ID_FILE_PLAY:
+		_player.Play();
+		_timer.Start();
+		_UpdateTitle();
+		break;
+
 	case IDA_PLAY:
 		_player.Toggle();
+		_timer.Start();
+		_UpdateTitle();
 		break;
 
 	case ID_FILE_STOP:
@@ -411,22 +421,30 @@ void WinMidi::Command(int id)
 		break;
 	case IDA_NOTEPLUS:
 		_note_sheet.SetPixelsPerCrotchet(_note_sheet.GetPixelsPerCrotchet() + 8);
+		_UpdateTitle();
 		break;
 	case IDA_NOTEMINUS:
 		_note_sheet.SetPixelsPerCrotchet(_note_sheet.GetPixelsPerCrotchet() - 8);
+		_UpdateTitle();
 		break;
 	case IDA_TEMPOPLUS:
 		_tempo_multiplier += 0.25f;
+		_UpdateTitle();
 		break;
 	case IDA_TEMPOMINUS:
 		_tempo_multiplier -= 0.25f;
 		if (_tempo_multiplier < 0.f) _player.ResetNotes();
+		_UpdateTitle();
 		break;
 	case IDA_SKIPFWD:
+		_StopWorker();
 		_player.Seek(5.0);
+		_StartWorker();
 		break;
 	case IDA_SKIPBACK:
+		_StopWorker();
 		_player.Seek(-5.0);
+		_StartWorker();
 		break;
 	}
 }

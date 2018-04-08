@@ -33,7 +33,7 @@ public:
 
 	void SetMenuItemChecked(int Id, bool Checked);
 
-	inline bool IsRunning() { return _running; };
+	inline bool IsRunningThread() { return _runningthread; };
 protected:
 	//D2d
 	ID2D1Factory*			_d2d_factory;
@@ -53,10 +53,10 @@ protected:
 	NoteSheet				_note_sheet;
 	//worker
 	WorkerThread			_worker;
-	bool					_worker_active;
 
 	//General variables
-	bool					_running;
+	bool					_pending_size_change;
+	bool					_runningthread;
 	float					_run_time;
 	POINT					_cursor_pos;
 
@@ -83,6 +83,9 @@ protected:
 	bool					_was_playing;
 	bool					_progress_bar_enabled;
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	inline void _StartWorker() { _runningthread = true; _worker.Start(this); };
+	inline void _StopWorker() { _runningthread = false; _worker.WaitForStop(); }
+
 	void _CalculateTickOffset();
 	void _UpdateSizes();
 
@@ -91,6 +94,8 @@ protected:
 
 	void _Update(double DeltaSeconds);
 	void _Render();
+
+	void _UpdateTitle();
 
 	static LRESULT CALLBACK _WindowProcedure(HWND WindowHandle, UINT Message, WPARAM WideParam, LPARAM LongParam);
 };
