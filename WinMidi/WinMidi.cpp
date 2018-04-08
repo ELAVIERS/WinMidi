@@ -169,17 +169,20 @@ void WinMidi::_CalculateTickOffset()
 {
 	unsigned short AreaWidth = 8;
 
+	unsigned int width = _window_size.width;
+	unsigned int height = _window_size.height - (_progress_bar_enabled ? 32 : 0);
+
 	if (_flip_axes)
 	{
-		_tick_offset = (short)(_note_sheet.GetSize().height * _tick_percentage);
+		_tick_offset = (short)(height * _tick_percentage);
 		_region_tick_marker.Set(0, _tick_offset > AreaWidth ? _tick_offset - AreaWidth : 0,
-			_note_sheet.GetSize().width, _tick_offset + AreaWidth);
+			width, _tick_offset + AreaWidth);
 	}
 	else
 	{
-		_tick_offset = (short)(_note_sheet.GetSize().width  * _tick_percentage);
+		_tick_offset = (short)(width  * _tick_percentage);
 		_region_tick_marker.Set(_tick_offset > AreaWidth ? _tick_offset - AreaWidth : 0, 0, 
-			_tick_offset + AreaWidth, _note_sheet.GetSize().height);
+			_tick_offset + AreaWidth, height);
 	}
 
 	_note_sheet.SetTickOffset(_tick_offset);
@@ -231,6 +234,7 @@ void WinMidi::Resize(unsigned int width, unsigned int height)
 {
 	_window_size = D2D1::SizeU(width, height);
 
+	_CalculateTickOffset();
 	_UpdateSizes();
 }
 
@@ -243,8 +247,6 @@ void WinMidi::_UpdateSizes()
 	_progress_rect_bg.right = (float)_window_size.width;
 
 	_region_progress_bar.Set(0, _note_sheet.GetSize().height, _window_size.width, _window_size.height);
-
-	_CalculateTickOffset();
 
 	if (_d2d_render_target) {
 		_d2d_render_target->Resize(_window_size);

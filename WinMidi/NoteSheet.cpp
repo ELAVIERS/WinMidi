@@ -110,6 +110,12 @@ void NoteSheet::Render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrus
 		* _view_matrix
 		);
 
+	unsigned int screen_ticks = ((float)_size.width / (float)_pixels_per_crotchet) * _ticks_per_crotchet;
+	float tick_percent = (float)_tick_offset / (float)_size.width;
+
+	unsigned int upper_bound = tick + screen_ticks * (1.f - tick_percent);
+	unsigned int lower_bound = (tick > screen_ticks * tick_percent ? tick - screen_ticks * tick_percent : 0);
+
 	for (int trackid = 0; trackid < _track_count; trackid++)
 	{
 		static size_t size;
@@ -119,14 +125,19 @@ void NoteSheet::Render(ID2D1HwndRenderTarget* render_target, ID2D1SolidColorBrus
 
 		for (unsigned int i = 0; i < size; ++i)
 		{
-			if (tick >= _notes[trackid][i].start && tick <= _notes[trackid][i].end)
+			if (_notes[trackid][i].start >= upper_bound) break;
+
+			if (_notes[trackid][i].end > lower_bound)
 			{
-				brush->SetColor(ScaleColour(TRACK_COLOURS[trackid % TRACK_COLOUR_COUNT], .75f));
-				render_target->FillRectangle(_rects[trackid][i], brush);
-				brush->SetColor(TRACK_COLOURS[trackid % TRACK_COLOUR_COUNT]);
+				if (tick >= _notes[trackid][i].start && tick <= _notes[trackid][i].end)
+				{
+					brush->SetColor(ScaleColour(TRACK_COLOURS[trackid % TRACK_COLOUR_COUNT], .75f));
+					render_target->FillRectangle(_rects[trackid][i], brush);
+					brush->SetColor(TRACK_COLOURS[trackid % TRACK_COLOUR_COUNT]);
+				}
+				else
+					render_target->FillRectangle(_rects[trackid][i], brush);
 			}
-			else
-				render_target->FillRectangle(_rects[trackid][i], brush);
 		}
 	}
 }

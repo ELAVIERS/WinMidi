@@ -24,11 +24,11 @@ void MidiTrack::Update(signed int delta_ticks)
 
 	if (_ticks < 0)
 	{
-		while (_event_index > 0 && (unsigned int)(-1 * _ticks) > _events[_event_index]->delta_ticks)
+		while (_event_index > 0 && _ticks < 0)
 		{
-			_ticks += _events[_event_index]->delta_ticks;
-
 			--_event_index;
+
+			_ticks += _events[_event_index]->delta_ticks;
 		}
 	}
 	else
